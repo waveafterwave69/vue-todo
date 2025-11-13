@@ -5,7 +5,10 @@
 
     --font-family: 'Inter', sans-serif;
 
-    --color-white: #ffffff;
+    --color-white: #fafafa;
+    --color-purple: #5f33e1;
+    --color-grey: #6e6a7c;
+    --color-black: #24252c;
 
     --transition-duration: 0.2s;
 }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Progress from '@/components/Progress.vue'
 import Search from '@/components/Search.vue'
 import Tags from '@/components/Tags.vue'
 import { useDate } from '@/hooks/useDate'
@@ -14,7 +15,10 @@ const { currentMonth, day, hoursAndMinutes } = useDate()
 
         <!-- Поиск задач -->
         <Search />
+        <!-- Теги -->
         <Tags />
+        <!-- Прогресс задач -->
+        <Progress />
     </section>
 </template>
 

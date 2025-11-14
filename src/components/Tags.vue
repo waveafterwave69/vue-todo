@@ -1,19 +1,46 @@
 <script setup lang="ts">
 import { useSearch } from '@/hooks/useSearch'
-
 const { searchValue, statusValue, tagValue } = useSearch()
+
+const deleteSearchValue = () => {
+    searchValue.value = ''
+}
+
+const deleteStatsValue = () => {
+    statusValue.value = ''
+}
+
+const deleteTagValue = () => {
+    tagValue.value = ''
+}
 </script>
 
 <template>
     <ul class="tags__list">
-        <li class="list__item search" v-if="searchValue">{{ searchValue }}</li>
-        <li class="list__item status" v-if="statusValue">{{ statusValue }}</li>
-        <li class="list__item tag" v-if="tagValue">{{ tagValue }}</li>
+        <li class="list__item search" v-if="searchValue">
+            {{ searchValue }}
+            <button @click="deleteSearchValue">
+                <img src="../assets/close.png" alt="убрать тег" />
+            </button>
+        </li>
+        <li class="list__item status" v-if="statusValue">
+            {{ statusValue }}
+            <button @click="deleteStatsValue">
+                <img src="../assets/close.png" alt="убрать тег" />
+            </button>
+        </li>
+        <li class="list__item tag" v-if="tagValue">
+            {{ tagValue }}
+            <button @click="deleteTagValue">
+                <img src="../assets/close.png" alt="убрать тег" />
+            </button>
+        </li>
     </ul>
 </template>
 
 <style scoped>
 .tags__list {
+    margin-bottom: 20px;
     margin-top: 15px;
     display: flex;
     column-gap: 8px;
@@ -23,8 +50,16 @@ const { searchValue, statusValue, tagValue } = useSearch()
 }
 
 .list__item {
+    display: flex;
+    align-items: center;
     padding: 5px 20px;
     border-radius: 15px;
+    column-gap: 10px;
+}
+
+.list__item button {
+    width: 11px;
+    height: 11px;
 }
 
 .search {
@@ -37,5 +72,11 @@ const { searchValue, statusValue, tagValue } = useSearch()
 
 .tag {
     background-color: hsla(48, 100%, 50%, 0.445);
+}
+
+@media (max-width: 425px) {
+    .list__item button {
+        display: none;
+    }
 }
 </style>

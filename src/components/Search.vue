@@ -65,6 +65,11 @@ const categoryOptions = [
     width: 17px;
 }
 
+.search__input {
+    padding-right: 20px;
+    width: 100%;
+}
+
 .option__content {
     display: flex;
     align-items: center;

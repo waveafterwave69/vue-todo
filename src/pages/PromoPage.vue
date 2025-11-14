@@ -27,7 +27,7 @@ import { RouterLink } from 'vue-router'
 
 <style scoped>
 .promo__content {
-    margin-top: 100px;
+    margin-top: 80px;
     display: flex;
     align-items: center;
     column-gap: 100px;
@@ -35,7 +35,7 @@ import { RouterLink } from 'vue-router'
 }
 
 .promo__img {
-    width: 500px;
+    width: 600px;
 }
 
 .promo__title {
@@ -50,7 +50,7 @@ import { RouterLink } from 'vue-router'
     font-size: 20px;
     color: var(--color-grey);
     max-width: 550px;
-    margin-bottom: 35px;
+    margin-bottom: 55px;
 }
 
 .promo__button {
@@ -151,7 +151,7 @@ import { RouterLink } from 'vue-router'
 
 @media (max-width: 425px) {
     .promo__content {
-        margin-top: 50px;
+        margin-top: 70px;
         row-gap: 20px;
     }
 

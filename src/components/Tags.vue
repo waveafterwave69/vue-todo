@@ -16,7 +16,7 @@ const deleteTagValue = () => {
 </script>
 
 <template>
-    <ul class="tags__list">
+    <ul class="tags__list" v-auto-animate>
         <li class="list__item search" v-if="searchValue">
             {{ searchValue }}
             <button @click="deleteSearchValue">

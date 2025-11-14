@@ -1,21 +1,20 @@
 <script setup lang="ts">
 import Search from '@/components/Search.vue'
+import Tags from '@/components/Tags.vue'
 import { useDate } from '@/hooks/useDate'
-import { ref } from 'vue'
 
 const { currentMonth, day, hoursAndMinutes } = useDate()
 </script>
 
 <template>
     <section class="home">
-        <div class="container">
-            <header class="header__time">
-                {{ hoursAndMinutes }}, <span>{{ day }} {{ currentMonth }}</span>
-            </header>
+        <header class="header__time">
+            {{ hoursAndMinutes }}, <span>{{ day }} {{ currentMonth }}</span>
+        </header>
 
-            <!-- Поиск задач -->
-            <Search />
-        </div>
+        <!-- Поиск задач -->
+        <Search />
+        <Tags />
     </section>
 </template>
 

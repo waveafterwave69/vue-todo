@@ -1,14 +1,12 @@
 <script setup lang="ts">
+import { useSearch } from '@/hooks/useSearch'
 import SelectUI from '@/UI/SelectUI.vue'
-import { ref } from 'vue'
 
-const statusFilter = ref('')
-const categoryFilter = ref('')
+const { searchValue, statusValue, tagValue } = useSearch()
 
-// Опции для селектов - убираем disabled у placeholder
 const statusOptions = [
-    { value: 'done', label: 'Выполненные' },
-    { value: 'progress', label: 'Не выполненные' },
+    { value: 'выполненные', label: 'Выполненные' },
+    { value: 'не выполненные', label: 'Не выполненные' },
 ]
 
 const categoryOptions = [
@@ -22,6 +20,7 @@ const categoryOptions = [
     <div class="search">
         <div class="search__content">
             <input
+                v-model="searchValue"
                 type="text"
                 class="search__input"
                 placeholder="Поиск задач..."
@@ -30,12 +29,12 @@ const categoryOptions = [
         </div>
         <div class="option__content">
             <SelectUI
-                v-model="statusFilter"
+                v-model="statusValue"
                 :options="statusOptions"
                 placeholder="Статус"
             />
             <SelectUI
-                v-model="categoryFilter"
+                v-model="tagValue"
                 :options="categoryOptions"
                 placeholder="Категория"
             />
@@ -101,6 +100,8 @@ const categoryOptions = [
 
     .option__content {
         width: 100%;
+        flex-wrap: wrap;
+        row-gap: 8px;
     }
 
     .search__content img {

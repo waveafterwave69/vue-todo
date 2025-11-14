@@ -90,6 +90,7 @@ const clearValue = () => {
     position: relative;
     display: inline-block;
     width: 100%;
+    min-width: 220px;
 }
 
 .custom-select {
@@ -151,6 +152,12 @@ const clearValue = () => {
     color: #ef4444;
     opacity: 1;
     background-color: #fef2f2;
+}
+
+@media (max-width: 550px) {
+    .select-wrapper {
+        min-width: 200px;
+    }
 }
 
 @media (max-width: 425px) {

@@ -7,12 +7,16 @@ import { RouterLink } from 'vue-router'
         <div class="promo__content">
             <div class="promo__row">
                 <h1 class="promo__title">Управление задачами & To-Do List</h1>
-                <p class="promo__text">
-                    Этот продуктивный инструмент создан, чтобы помочь ты лучше
-                    справишься со своей задачей проектно удобно!
-                </p>
+                <div class="text__content">
+                    <p class="promo__text">
+                        Этот инструмент создан, чтобы помочь вам лучше
+                        справляться со своими задачи быстро и удобно!
+                    </p>
+                    <p class="promo__text">Все задачи храняться локально.</p>
+                </div>
+
                 <RouterLink to="/home" class="promo__button">
-                    <span>Давайте начнем</span>
+                    <span>Перейти к задачам</span>
                     <img src="../assets/arrow-left.svg" alt="arrow-up" />
                 </RouterLink>
             </div>
@@ -45,12 +49,15 @@ import { RouterLink } from 'vue-router'
     margin-bottom: 35px;
 }
 
+.text__content {
+    max-width: 550px;
+    margin-bottom: 55px;
+}
+
 .promo__text {
     font-weight: 400;
     font-size: 20px;
     color: var(--color-grey);
-    max-width: 550px;
-    margin-bottom: 55px;
 }
 
 .promo__button {
@@ -93,11 +100,14 @@ import { RouterLink } from 'vue-router'
         margin-bottom: 25px;
     }
 
+    .text__content {
+        max-width: 350px;
+        margin-bottom: 25px;
+    }
+
     .promo__text {
         font-size: 18px;
         color: var(--color-grey);
-        max-width: 350px;
-        margin-bottom: 25px;
     }
 
     .promo__button {
@@ -133,12 +143,15 @@ import { RouterLink } from 'vue-router'
         text-align: center;
     }
 
-    .promo__text {
-        font-size: 16px;
-        color: var(--color-grey);
+    .text__content {
         max-width: 350px;
         margin-bottom: 25px;
         text-align: center;
+    }
+
+    .promo__text {
+        font-size: 16px;
+        color: var(--color-grey);
     }
 
     .promo__button {
@@ -166,12 +179,15 @@ import { RouterLink } from 'vue-router'
         text-align: center;
     }
 
-    .promo__text {
-        font-size: 16px;
-        color: var(--color-grey);
+    .text__content {
         max-width: 300px;
         margin-bottom: 25px;
         text-align: center;
+    }
+
+    .promo__text {
+        font-size: 16px;
+        color: var(--color-grey);
     }
 
     .promo__button {

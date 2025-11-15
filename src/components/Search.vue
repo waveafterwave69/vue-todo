@@ -1,19 +1,36 @@
 <script setup lang="ts">
 import { useSearch } from '@/hooks/useSearch'
+import { useTable } from '@/hooks/useTable'
 import SelectUI from '@/UI/SelectUI.vue'
+import { computed } from 'vue'
 
 const { searchValue, statusValue, tagValue, deleteSearchValue } = useSearch()
+const { items } = useTable()
 
 const statusOptions = [
     { value: 'выполненные', label: 'Выполненные' },
     { value: 'не выполненные', label: 'Не выполненные' },
 ]
 
-const categoryOptions = [
-    { value: 'work', label: 'Работа' },
-    { value: 'personal', label: 'Личные' },
-    { value: 'shopping', label: 'Покупки' },
-]
+// Функция для разбивки и очистки тегов
+const parseTags = (tagsString: string): string[] => {
+    return tagsString
+        .split(',')
+        .map((tag) => tag.trim())
+        .filter((tag) => tag.length > 0)
+}
+
+// Получение уникальных тегов
+const categoryOptions = computed(() => {
+    const allTags = items.value.flatMap((item) => parseTags(item.tags))
+
+    const uniqueTags = [...new Set(allTags)]
+
+    return uniqueTags.map((tag) => ({
+        label: tag,
+        value: tag,
+    }))
+})
 </script>
 
 <template>

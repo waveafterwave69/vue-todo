@@ -1,16 +1,22 @@
 <script setup lang="ts">
+import { useTable } from '@/hooks/useTable'
 import { computed } from 'vue'
 
-const props = defineProps<{
-    completed?: number
-    total?: number
-}>()
+const { filteredItems } = useTable()
 
-const completedTasks = props.completed ?? 8
-const totalTasks = props.total ?? 11
+const completedTasks = computed(
+    () =>
+        filteredItems.value.filter((item) => item.status === 'выполненные')
+            .length
+)
 
-const progress = computed(() => (completedTasks / totalTasks) * 100)
-const circumference = 2 * Math.PI * 45 // 2πr, где r=45
+const totalTasks = computed(() => filteredItems.value.length)
+
+const progress = computed(() =>
+    totalTasks.value > 0 ? (completedTasks.value / totalTasks.value) * 100 : 0
+)
+
+const circumference = 2 * Math.PI * 45
 const strokeDasharray = computed(() => circumference)
 const strokeDashoffset = computed(
     () => circumference - (progress.value / 100) * circumference

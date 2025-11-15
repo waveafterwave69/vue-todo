@@ -81,9 +81,11 @@ if (typeof window !== 'undefined') {
                 <div class="table-mobile__title">{{ item.title }}</div>
                 <div
                     class="table-mobile__status"
-                    :class="{ 'status--completed': item.status === 'yes' }"
+                    :class="{
+                        'status--completed': item.status === 'выполненные',
+                    }"
                 >
-                    {{ item.status === 'yes' ? '✓' : '○' }}
+                    {{ item.status === 'выполненные' ? '✓' : '○' }}
                 </div>
             </div>
             <div class="table-mobile__tags">{{ item.tags }}</div>

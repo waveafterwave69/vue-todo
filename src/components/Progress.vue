@@ -70,7 +70,7 @@ const {
 <style scoped>
 .progress {
     margin-top: 15px;
-    /* background-color: var(--color-purple); */
+    background-color: var(--color-white);
     border: 1px solid var(--color-purple);
     border-radius: 15px;
     padding: 25px 80px;

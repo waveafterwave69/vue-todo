@@ -1,26 +1,14 @@
 <script setup lang="ts">
-import { useTable } from '@/hooks/useTable'
-import { computed } from 'vue'
+import { useProgress } from '@/hooks/useProgress'
 
-const { filteredItems } = useTable()
-
-const completedTasks = computed(
-    () =>
-        filteredItems.value.filter((item) => item.status === 'выполненные')
-            .length
-)
-
-const totalTasks = computed(() => filteredItems.value.length)
-
-const progress = computed(() =>
-    totalTasks.value > 0 ? (completedTasks.value / totalTasks.value) * 100 : 0
-)
-
-const circumference = 2 * Math.PI * 45
-const strokeDasharray = computed(() => circumference)
-const strokeDashoffset = computed(
-    () => circumference - (progress.value / 100) * circumference
-)
+const {
+    completedTasks,
+    strokeDasharray,
+    totalTasks,
+    progress,
+    circumference,
+    strokeDashoffset,
+} = useProgress()
 </script>
 
 <template>
@@ -41,7 +29,7 @@ const strokeDashoffset = computed(
                 <!-- Фоновый круг -->
                 <circle
                     class="progress-ring__background"
-                    stroke="#8764FF"
+                    stroke="#c3b1fc"
                     stroke-width="12"
                     fill="transparent"
                     r="45"
@@ -51,7 +39,7 @@ const strokeDashoffset = computed(
                 <!-- Прогресс -->
                 <circle
                     class="progress-ring__circle"
-                    stroke="#EEE9FF"
+                    stroke="#5f33e1"
                     stroke-width="12"
                     stroke-linecap="round"
                     fill="transparent"
@@ -70,7 +58,7 @@ const strokeDashoffset = computed(
                     dy="7"
                     font-size="16"
                     font-weight="bold"
-                    fill="#EEE9FF"
+                    fill="#5f33e1"
                 >
                     {{ Math.round(progress) }}%
                 </text>
@@ -82,13 +70,16 @@ const strokeDashoffset = computed(
 <style scoped>
 .progress {
     margin-top: 15px;
-    background-color: var(--color-purple);
+    /* background-color: var(--color-purple); */
+    border: 1px solid var(--color-purple);
     border-radius: 15px;
     padding: 25px 80px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     color: var(--color-white);
+    color: var(--color-purple);
+
     flex-wrap: wrap;
     row-gap: 20px;
 }
@@ -102,14 +93,13 @@ const strokeDashoffset = computed(
     font-weight: 600;
     font-size: 26px;
     margin-bottom: 12px;
-    color: #eee9ff;
+    color: var(--color-purple);
     line-height: 1.2;
 }
 
 .progress__subtitle {
     font-weight: 300;
     font-size: 18px;
-    color: #eee9ff;
     opacity: 0.9;
     line-height: 1.4;
 }

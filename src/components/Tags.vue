@@ -61,15 +61,15 @@ const {
 }
 
 .search {
-    background-color: rgba(18, 146, 210, 0.432);
+    background: linear-gradient(135deg, #a7cdff, #8092f8);
 }
 
 .status {
-    background-color: rgba(85, 210, 18, 0.445);
+    background: linear-gradient(135deg, #b9ffa7, #74c774);
 }
 
 .tag {
-    background-color: hsla(48, 100%, 50%, 0.445);
+    background: linear-gradient(135deg, #ffeaa7, #fab1a0);
 }
 
 @media (max-width: 425px) {

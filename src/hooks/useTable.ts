@@ -1,10 +1,9 @@
-import { TableItem } from '@/types/table'
-import { ref, computed, watchEffect } from 'vue'
+import { computed, ref } from 'vue'
 import { useSearch } from './useSearch'
+import { TableItem } from '@/types/table'
 
 export const useTable = () => {
     const { searchValue, statusValue, tagValue } = useSearch()
-
     const items = ref<TableItem[]>([
         {
             id: 1,

@@ -2,6 +2,7 @@
 import Progress from '@/components/Progress.vue'
 import Search from '@/components/Search.vue'
 import Tags from '@/components/Tags.vue'
+import TasksTable from '@/components/TasksTable.vue'
 import { useDate } from '@/hooks/useDate'
 
 const { currentMonth, day, hoursAndMinutes } = useDate()
@@ -19,6 +20,8 @@ const { currentMonth, day, hoursAndMinutes } = useDate()
         <Tags />
         <!-- Прогресс задач -->
         <Progress />
+        <!-- Таблица с задачами -->
+        <TasksTable />
     </section>
 </template>
 

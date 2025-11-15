@@ -1,18 +1,13 @@
 <script setup lang="ts">
 import { useSearch } from '@/hooks/useSearch'
-const { searchValue, statusValue, tagValue } = useSearch()
-
-const deleteSearchValue = () => {
-    searchValue.value = ''
-}
-
-const deleteStatsValue = () => {
-    statusValue.value = ''
-}
-
-const deleteTagValue = () => {
-    tagValue.value = ''
-}
+const {
+    searchValue,
+    statusValue,
+    tagValue,
+    deleteSearchValue,
+    deleteStatsValue,
+    deleteTagValue,
+} = useSearch()
 </script>
 
 <template>

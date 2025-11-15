@@ -2,7 +2,7 @@
 import { useSearch } from '@/hooks/useSearch'
 import SelectUI from '@/UI/SelectUI.vue'
 
-const { searchValue, statusValue, tagValue } = useSearch()
+const { searchValue, statusValue, tagValue, deleteSearchValue } = useSearch()
 
 const statusOptions = [
     { value: 'выполненные', label: 'Выполненные' },
@@ -25,6 +25,24 @@ const categoryOptions = [
                 class="search__input"
                 placeholder="Поиск задач..."
             />
+            <button
+                v-if="searchValue"
+                class="clear-button"
+                @click="deleteSearchValue"
+                type="button"
+                aria-label="Очистить выбор"
+            >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path
+                        d="M10.5 3.5L3.5 10.5M3.5 3.5L10.5 10.5"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+                </svg>
+            </button>
+
             <img src="../assets/search.svg" alt="Поиск" />
         </div>
         <div class="option__content">
@@ -54,9 +72,10 @@ const categoryOptions = [
     padding: 12px 16px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     border: 1.5px solid #e1e5e9;
     border-radius: 15px;
-    align-items: center;
+
     font-size: 16px;
     width: 300px;
 }
@@ -68,6 +87,30 @@ const categoryOptions = [
 .search__input {
     padding-right: 20px;
     width: 100%;
+}
+
+.clear-button {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    margin-right: 5px;
+    border: none;
+    border-radius: 4px;
+    color: #6b7280;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+    padding: 0;
+    z-index: 2;
+}
+
+.clear-button:hover {
+    color: #ef4444;
+    opacity: 1;
+    background-color: #fef2f2;
 }
 
 .option__content {

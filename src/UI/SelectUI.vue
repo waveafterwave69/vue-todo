@@ -95,10 +95,11 @@ const clearValue = () => {
 
 .custom-select {
     width: 100%;
-    padding: 12px 16px;
+    padding: 15px 16px;
     padding-right: 40px;
     font-size: 16px;
-    border: 1.5px solid #e1e5e9;
+    border: 1.5px solid var(--color-purple);
+    background-color: var(--color-white);
     cursor: pointer;
     appearance: none;
     border-radius: 15px;

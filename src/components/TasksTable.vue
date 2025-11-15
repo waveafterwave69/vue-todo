@@ -1,46 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useAutoAnimate } from '@formkit/auto-animate/vue'
-import { TableItem } from '@/types/table'
 import { useDragDrop } from '@/hooks/useDragDrop'
+import { useTable } from '@/hooks/useTable'
 
-const items = ref<TableItem[]>([
-    {
-        id: 1,
-        status: 'yes',
-        title: '1',
-        tags: 'ворк, рутина, еда',
-        delete: 'удалить',
-    },
-    {
-        id: 2,
-        status: 'yes',
-        title: '2',
-        tags: 'ворк, рутина, еда',
-        delete: 'удалить',
-    },
-    {
-        id: 3,
-        status: 'yes',
-        title: '3',
-        tags: 'ворк, рутина, еда',
-        delete: 'удалить',
-    },
-    {
-        id: 4,
-        status: 'yes',
-        title: '4',
-        tags: 'ворк, рутина, еда',
-        delete: 'удалить',
-    },
-    {
-        id: 5,
-        status: 'yes',
-        title: 'Сходить в магазин',
-        tags: 'ворк, рутина, еда',
-        delete: 'удалить',
-    },
-])
+const { filteredItems } = useTable()
 
 const {
     handleDragStart,
@@ -49,7 +13,7 @@ const {
     handleDragLeave,
     handleDrop,
     handleDragEnd,
-} = useDragDrop(items)
+} = useDragDrop(filteredItems)
 
 const [tbody] = useAutoAnimate()
 
@@ -80,7 +44,7 @@ if (typeof window !== 'undefined') {
         </thead>
         <tbody ref="tbody">
             <tr
-                v-for="item in items"
+                v-for="item in filteredItems"
                 :key="item.id"
                 class="table__item"
                 draggable="true"
@@ -102,7 +66,7 @@ if (typeof window !== 'undefined') {
     <!-- Мобильная версия -->
     <div v-else class="table-mobile">
         <div
-            v-for="item in items"
+            v-for="item in filteredItems"
             :key="item.id"
             class="table-mobile__item"
             draggable="true"
@@ -169,6 +133,7 @@ if (typeof window !== 'undefined') {
 }
 
 .table__item {
+    background-color: var(--color-white);
     display: flex;
     align-items: center;
     margin: 5px 0;

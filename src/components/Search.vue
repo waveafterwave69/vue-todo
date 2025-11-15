@@ -69,13 +69,13 @@ const categoryOptions = [
 }
 
 .search__content {
-    padding: 12px 16px;
+    padding: 15px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 1.5px solid #e1e5e9;
+    border: 1.5px solid var(--color-purple);
     border-radius: 15px;
-
+    background-color: var(--color-white);
     font-size: 16px;
     width: 300px;
 }

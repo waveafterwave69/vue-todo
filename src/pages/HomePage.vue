@@ -36,4 +36,15 @@ const { currentMonth, day, hoursAndMinutes } = useDate()
     font-weight: 300;
     font-size: 20px;
 }
+
+@media (max-width: 425px) {
+    .header__time {
+        margin-top: 15px;
+        font-size: 30px;
+    }
+
+    .header__time span {
+        font-size: 18px;
+    }
+}
 </style>

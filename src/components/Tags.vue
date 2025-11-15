@@ -11,7 +11,11 @@ const {
 </script>
 
 <template>
-    <ul class="tags__list" v-auto-animate>
+    <ul
+        class="tags__list"
+        v-auto-animate
+        v-if="searchValue || statusValue || tagValue"
+    >
         <li class="list__item search" v-if="searchValue">
             {{ searchValue }}
             <button @click="deleteSearchValue">
@@ -35,7 +39,6 @@ const {
 
 <style scoped>
 .tags__list {
-    margin-bottom: 20px;
     margin-top: 15px;
     display: flex;
     column-gap: 8px;

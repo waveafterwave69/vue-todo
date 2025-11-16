@@ -71,7 +71,7 @@ const categoryOptions = computed(() => {
             <SelectUI
                 v-model="tagValue"
                 :options="categoryOptions"
-                placeholder="Категория"
+                placeholder="Теги"
             />
         </div>
     </div>

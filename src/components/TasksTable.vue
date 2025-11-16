@@ -4,6 +4,7 @@ import { useDragDrop } from '@/hooks/useDragDrop'
 import { useTable } from '@/hooks/useTable'
 import TasksTableDesktop from './TasksTableDesktop.vue'
 import TasksTableMobile from './TasksTableMobile.vue'
+import { useTask } from '@/hooks/useTask'
 
 const { items, toggleStatus, deleteItem } = useTable()
 

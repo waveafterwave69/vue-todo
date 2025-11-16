@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useTask } from '@/hooks/useTask'
 import type { TableItem } from '@/types/table'
 
 interface Props {
@@ -14,6 +15,19 @@ interface Props {
 }
 
 defineProps<Props>()
+
+const { pickTask } = useTask()
+
+const handleRowClick = (item: TableItem, event: MouseEvent) => {
+    if (
+        (event.target as HTMLElement).closest(
+            '.status-checkbox, .delete-button'
+        )
+    ) {
+        return
+    }
+    pickTask(item)
+}
 </script>
 
 <template>
@@ -30,6 +44,7 @@ defineProps<Props>()
             @dragleave="onDragLeave($event)"
             @drop="onDrop($event)"
             @dragend="onDragEnd($event)"
+            @click="handleRowClick(item, $event)"
         >
             <div class="table-mobile__main">
                 <label class="status-checkbox status-checkbox--mobile">

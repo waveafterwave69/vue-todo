@@ -2,10 +2,13 @@
 import Progress from '@/components/Progress.vue'
 import Search from '@/components/Search.vue'
 import Tags from '@/components/Tags.vue'
+import TaskModal from '@/components/TaskModal.vue'
 import TasksTable from '@/components/TasksTable.vue'
 import { useDate } from '@/hooks/useDate'
+import { useTask } from '@/hooks/useTask'
 
 const { currentMonth, day, hoursAndMinutes } = useDate()
+const { isOpen } = useTask()
 </script>
 
 <template>
@@ -22,6 +25,8 @@ const { currentMonth, day, hoursAndMinutes } = useDate()
         <Progress />
         <!-- Таблица с задачами -->
         <TasksTable />
+        <!-- Модалка с инфой о задаче -->
+        <TaskModal v-if="isOpen" />
     </section>
 </template>
 

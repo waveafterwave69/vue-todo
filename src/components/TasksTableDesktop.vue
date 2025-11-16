@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useAutoAnimate } from '@formkit/auto-animate/vue'
 import type { TableItem } from '@/types/table'
+import { useTask } from '@/hooks/useTask'
 
 interface Props {
     items: TableItem[]
@@ -15,6 +16,19 @@ interface Props {
 }
 
 defineProps<Props>()
+
+const { pickTask } = useTask()
+
+const handleRowClick = (item: TableItem, event: MouseEvent) => {
+    if (
+        (event.target as HTMLElement).closest(
+            '.status-checkbox, .delete-button'
+        )
+    ) {
+        return
+    }
+    pickTask(item)
+}
 
 const [tbody] = useAutoAnimate()
 </script>
@@ -45,6 +59,7 @@ const [tbody] = useAutoAnimate()
                     @dragleave="onDragLeave($event)"
                     @drop="onDrop($event)"
                     @dragend="onDragEnd($event)"
+                    @click="handleRowClick(item, $event)"
                 >
                     <td class="status">
                         <label class="status-checkbox">

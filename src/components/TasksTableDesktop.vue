@@ -221,13 +221,11 @@ const [tbody] = useAutoAnimate()
     background-color: white;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     flex-shrink: 0;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .status-checkbox__input:checked + .status-checkbox__checkmark {
     background: linear-gradient(135deg, #28a745, #20c997);
     border-color: #28a745;
-    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
 }
 
 .status-checkbox__input:checked + .status-checkbox__checkmark:after {
@@ -274,13 +272,11 @@ const [tbody] = useAutoAnimate()
     font-size: 12px;
     color: #2d3748;
     font-weight: 500;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     transition: all 0.2s ease;
 }
 
 .tag:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .tag.tag--completed {

@@ -109,13 +109,11 @@ defineProps<Props>()
     padding: 20px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: grab;
-    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
 }
 
 .table-mobile__item:hover {
     background-color: #f8fafc;
     transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(135, 100, 255, 0.1);
 }
 
 .table-mobile__item:active {
@@ -183,7 +181,6 @@ defineProps<Props>()
     font-size: 11px;
     color: #2d3748;
     font-weight: 500;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     transition: all 0.2s ease;
 }
 
@@ -240,13 +237,11 @@ defineProps<Props>()
     background-color: white;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     flex-shrink: 0;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .status-checkbox__input:checked + .status-checkbox__checkmark {
     background: linear-gradient(135deg, #28a745, #20c997);
     border-color: #28a745;
-    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
 }
 
 .status-checkbox__input:checked + .status-checkbox__checkmark:after {

@@ -2,21 +2,22 @@ import { computed } from 'vue'
 import { useTable } from './useTable'
 
 export const useProgress = () => {
-    const { filteredItems } = useTable()
+    const { stats } = useTable()
 
-    const completedTasks = computed(
-        () =>
-            filteredItems.value.filter((item) => item.status === 'выполненные')
-                .length
-    )
+    const completedTasks = computed(() => {
+        const value = stats.value.completed
+        return value
+    })
 
-    const totalTasks = computed(() => filteredItems.value.length)
+    const totalTasks = computed(() => {
+        const value = stats.value.total
+        return value
+    })
 
-    const progress = computed(() =>
-        totalTasks.value > 0
-            ? (completedTasks.value / totalTasks.value) * 100
-            : 0
-    )
+    const progress = computed(() => {
+        const value = stats.value.completionRate
+        return value
+    })
 
     const circumference = 2 * Math.PI * 45
     const strokeDasharray = computed(() => circumference)

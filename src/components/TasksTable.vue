@@ -5,7 +5,7 @@ import { useTable } from '@/hooks/useTable'
 import TasksTableDesktop from './TasksTableDesktop.vue'
 import TasksTableMobile from './TasksTableMobile.vue'
 
-const { filteredItems, toggleStatus } = useTable()
+const { items, toggleStatus, deleteItem } = useTable()
 
 const {
     handleDragStart,
@@ -14,7 +14,7 @@ const {
     handleDragLeave,
     handleDrop,
     handleDragEnd,
-} = useDragDrop(filteredItems)
+} = useDragDrop(items)
 
 const isMobile = ref(false)
 
@@ -42,7 +42,7 @@ const handleDelete = (itemId: number) => {
     <div class="table">
         <TasksTableDesktop
             v-if="!isMobile"
-            :items="filteredItems"
+            :items="items"
             :on-toggle-status="handleToggleStatus"
             :on-delete="handleDelete"
             :on-drag-start="handleDragStart"
@@ -54,7 +54,7 @@ const handleDelete = (itemId: number) => {
         />
         <TasksTableMobile
             v-else
-            :items="filteredItems"
+            :items="items"
             :on-toggle-status="handleToggleStatus"
             :on-delete="handleDelete"
             :on-drag-start="handleDragStart"

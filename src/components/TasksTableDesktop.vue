@@ -9,9 +9,9 @@ interface Props {
     onDelete: (id: number) => void
     onDragStart: (event: DragEvent, item: TableItem) => void
     onDragOver: (event: DragEvent) => void
-    onDragEnter: (event: DragEvent, index: number) => void // Добавляем index
+    onDragEnter: (event: DragEvent, index: number) => void
     onDragLeave: (event: DragEvent) => void
-    onDrop: (event: DragEvent, index: number) => void // Добавляем index
+    onDrop: (event: DragEvent, index: number) => void
     onDragEnd: (event: DragEvent) => void
 }
 

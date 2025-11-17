@@ -3,5 +3,4 @@ export interface TableItem {
     status: string
     title: string
     tags: string
-    delete: string
 }

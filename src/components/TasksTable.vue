@@ -36,6 +36,23 @@ onUnmounted(() => {
 </script>
 
 <template>
+    <div class="create">
+        <input
+            v-model="itemsStore.newTaskTitle"
+            type="text"
+            class="create__input"
+            placeholder="Заголовок задачи"
+        />
+        <input
+            v-model="itemsStore.newTaskTags"
+            type="text"
+            class="create__input"
+            placeholder="Теги задачи(через запятую)"
+        />
+        <button class="create__button" @click="itemsStore.addItem">
+            Создать
+        </button>
+    </div>
     <div class="table" v-if="itemsStore.items.length > 0">
         <TasksTableDesktop
             v-if="!isMobile"
@@ -68,6 +85,29 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.create {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 10px;
+    margin-top: 20px;
+}
+
+.create__input {
+    border: 1px solid var(--color-purple);
+    width: 100%;
+    font-size: 18px;
+    border-radius: 5px;
+    padding: 0px 15px;
+}
+
+.create__button {
+    background-color: var(--color-purple);
+    padding: 15px 35px;
+    font-size: 18px;
+    color: var(--color-white);
+    border-radius: 5px;
+}
+
 .table {
     margin-bottom: 30px;
     overflow: hidden;
@@ -78,5 +118,45 @@ onUnmounted(() => {
     padding: 40px;
     color: #666;
     font-size: 18px;
+}
+
+@media (max-width: 768px) {
+    .create {
+        margin-top: 15px;
+        flex-wrap: wrap;
+        row-gap: 8px;
+    }
+
+    .create__input {
+        font-size: 16px;
+        border-radius: 5px;
+        padding: 10px 10px;
+    }
+
+    .create__button {
+        padding: 10px 25px;
+        font-size: 16px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 425px) {
+    .create {
+        margin-top: 15px;
+        flex-wrap: wrap;
+        row-gap: 8px;
+    }
+
+    .create__input {
+        font-size: 14px;
+        border-radius: 5px;
+        padding: 10px 10px;
+    }
+
+    .create__button {
+        padding: 10px 25px;
+        font-size: 16px;
+        width: 100%;
+    }
 }
 </style>

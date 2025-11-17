@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import type { TableItem } from '@/types/table'
 import { useItemsStore } from './items'
 
-export const useDragDropStore = defineStore('dragDrop', () => {
+export const useDragDropStore = defineStore('dragAndDrop', () => {
     const draggedItem = ref<TableItem | null>(null)
     const dragOverIndex = ref<number | null>(null)
 
@@ -46,18 +46,15 @@ export const useDragDropStore = defineStore('dragDrop', () => {
 
         if (itemId !== -1) {
             const itemsStore = useItemsStore()
-            const fromIndex = itemsStore.items.findIndex(
+
+            // Находим индекс в исходном массиве (allItems)
+            const fromIndex = itemsStore.allItems.findIndex(
                 (item) => item.id === itemId
             )
 
             if (fromIndex !== -1 && fromIndex !== index) {
-                // Создаем копию массива и меняем порядок
-                const itemsCopy = [...itemsStore.items]
-                const [movedItem] = itemsCopy.splice(fromIndex, 1)
-                itemsCopy.splice(index, 0, movedItem)
-
-                // Обновляем исходный массив через itemsStore
-                itemsStore.items = itemsCopy
+                // Используем специальный action для изменения порядка
+                itemsStore.reorderItems(fromIndex, index)
             }
         }
 

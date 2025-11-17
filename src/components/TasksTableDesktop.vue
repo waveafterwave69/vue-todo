@@ -140,7 +140,7 @@ const [tbody] = useAutoAnimate()
 .table-container {
     margin-top: 20px;
     width: 100%;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 .table--desktop {

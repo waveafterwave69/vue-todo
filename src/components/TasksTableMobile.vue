@@ -115,6 +115,7 @@ const handleRowClick = (item: TableItem, event: MouseEvent) => {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    overflow: hidden;
 }
 
 .table-mobile__item {

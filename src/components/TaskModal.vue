@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { useTable } from '@/hooks/useTable'
 import { useTask } from '@/hooks/useTask'
+import { TableItem } from '@/types/table'
 
 const {
     task,
@@ -9,13 +11,19 @@ const {
     newTags,
     confirmTags,
     toggleStatus,
-    statusText,
 } = useTask()
+
+const { deleteItem } = useTable()
+
+const handleDelete = (task: TableItem) => {
+    closeModal()
+    deleteItem(task.id)
+}
 </script>
 
 <template>
     <div class="back" @click="closeModal"></div>
-    <div class="modal">
+    <div class="modal" v-if="task">
         <div class="modal__content">
             <div class="top">
                 <button class="close" @click="closeModal">
@@ -73,7 +81,7 @@ const {
                     </div>
                 </div>
             </div>
-            <button class="delete">Удалить</button>
+            <button class="delete" @click="handleDelete(task)">Удалить</button>
         </div>
     </div>
 </template>

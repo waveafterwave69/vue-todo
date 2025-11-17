@@ -4,7 +4,6 @@ import { useDragDrop } from '@/hooks/useDragDrop'
 import { useTable } from '@/hooks/useTable'
 import TasksTableDesktop from './TasksTableDesktop.vue'
 import TasksTableMobile from './TasksTableMobile.vue'
-import { useTask } from '@/hooks/useTask'
 
 const { items, toggleStatus, deleteItem } = useTable()
 
@@ -33,14 +32,12 @@ const handleToggleStatus = (itemId: number) => {
 }
 
 const handleDelete = (itemId: number) => {
-    if (confirm('Вы уверены, что хотите удалить эту задачу?')) {
-        // deleteItem(itemId)
-    }
+    deleteItem(itemId)
 }
 </script>
 
 <template>
-    <div class="table">
+    <div class="table" v-if="items.length > 0">
         <TasksTableDesktop
             v-if="!isMobile"
             :items="items"
@@ -71,5 +68,6 @@ const handleDelete = (itemId: number) => {
 <style scoped>
 .table {
     margin-bottom: 30px;
+    overflow: hidden;
 }
 </style>

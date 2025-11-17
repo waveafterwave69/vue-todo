@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useSearch } from '@/hooks/useSearch'
-import { useTable } from '@/hooks/useTable'
+import { useItemsStore } from '@/store/items'
+import { useSearchStore } from '@/store/search'
 import SelectUI from '@/UI/SelectUI.vue'
 import { computed } from 'vue'
 
-const { searchValue, statusValue, tagValue, deleteSearchValue } = useSearch()
-const { items } = useTable()
+const searchStore = useSearchStore()
+const itemsStore = useItemsStore()
 
 const statusOptions = [
     { value: 'выполненные', label: 'Выполненные' },
@@ -22,7 +22,7 @@ const parseTags = (tagsString: string): string[] => {
 
 // Получение уникальных тегов
 const categoryOptions = computed(() => {
-    const allTags = items.value.flatMap((item) => parseTags(item.tags))
+    const allTags = itemsStore.items.flatMap((item) => parseTags(item.tags))
 
     const uniqueTags = [...new Set(allTags)]
 
@@ -37,15 +37,15 @@ const categoryOptions = computed(() => {
     <div class="search">
         <div class="search__content">
             <input
-                v-model="searchValue"
+                v-model="searchStore.searchValue"
                 type="text"
                 class="search__input"
                 placeholder="Поиск задач..."
             />
             <button
-                v-if="searchValue"
+                v-if="searchStore.searchValue"
                 class="clear-button"
-                @click="deleteSearchValue"
+                @click="searchStore.clearSearch"
                 type="button"
                 aria-label="Очистить выбор"
             >
@@ -64,12 +64,12 @@ const categoryOptions = computed(() => {
         </div>
         <div class="option__content">
             <SelectUI
-                v-model="statusValue"
+                v-model="searchStore.statusValue"
                 :options="statusOptions"
                 placeholder="Статус"
             />
             <SelectUI
-                v-model="tagValue"
+                v-model="searchStore.tagValue"
                 :options="categoryOptions"
                 placeholder="Теги"
             />

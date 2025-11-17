@@ -1,36 +1,34 @@
 <script setup lang="ts">
-import { useSearch } from '@/hooks/useSearch'
-const {
-    searchValue,
-    statusValue,
-    tagValue,
-    deleteSearchValue,
-    deleteStatsValue,
-    deleteTagValue,
-} = useSearch()
+import { useSearchStore } from '@/store/search'
+
+const searchStore = useSearchStore()
 </script>
 
 <template>
     <ul
         class="tags__list"
         v-auto-animate
-        v-if="searchValue || statusValue || tagValue"
+        v-if="
+            searchStore.searchValue ||
+            searchStore.statusValue ||
+            searchStore.tagValue
+        "
     >
-        <li class="list__item search" v-if="searchValue">
-            {{ searchValue }}
-            <button @click="deleteSearchValue">
+        <li class="list__item search" v-if="searchStore.searchValue">
+            {{ searchStore.searchValue }}
+            <button @click="searchStore.clearSearch">
                 <img src="../assets/close.png" alt="убрать тег" />
             </button>
         </li>
-        <li class="list__item status" v-if="statusValue">
-            {{ statusValue }}
-            <button @click="deleteStatsValue">
+        <li class="list__item status" v-if="searchStore.statusValue">
+            {{ searchStore.statusValue }}
+            <button @click="searchStore.clearStatus">
                 <img src="../assets/close.png" alt="убрать тег" />
             </button>
         </li>
-        <li class="list__item tag" v-if="tagValue">
-            {{ tagValue }}
-            <button @click="deleteTagValue">
+        <li class="list__item tag" v-if="searchStore.tagValue">
+            {{ searchStore.tagValue }}
+            <button @click="searchStore.clearTags">
                 <img src="../assets/close.png" alt="убрать тег" />
             </button>
         </li>

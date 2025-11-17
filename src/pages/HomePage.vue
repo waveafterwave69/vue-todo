@@ -5,10 +5,10 @@ import Tags from '@/components/Tags.vue'
 import TaskModal from '@/components/TaskModal.vue'
 import TasksTable from '@/components/TasksTable.vue'
 import { useDate } from '@/hooks/useDate'
-import { useTask } from '@/hooks/useTask'
+import { useTaskStore } from '@/store/task'
 
 const { currentMonth, day, hoursAndMinutes } = useDate()
-const { isOpen } = useTask()
+const taskStore = useTaskStore()
 </script>
 
 <template>
@@ -26,7 +26,7 @@ const { isOpen } = useTask()
         <!-- Таблица с задачами -->
         <TasksTable />
         <!-- Модалка с инфой о задаче -->
-        <TaskModal v-if="isOpen" />
+        <TaskModal v-if="taskStore.showModal" />
     </section>
 </template>
 

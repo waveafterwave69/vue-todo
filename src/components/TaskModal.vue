@@ -1,53 +1,51 @@
 <script setup lang="ts">
-import { useTable } from '@/hooks/useTable'
-import { useTask } from '@/hooks/useTask'
-import { TableItem } from '@/types/table'
+import { useItemsStore } from '@/store/items'
+import { useTaskStore } from '@/store/task'
+import type { TableItem } from '@/types/table'
 
-const {
-    task,
-    closeModal,
-    changeTags,
-    isChanged,
-    newTags,
-    confirmTags,
-    toggleStatus,
-} = useTask()
-
-const { deleteItem } = useTable()
+const taskStore = useTaskStore()
+const itemsStore = useItemsStore()
 
 const handleDelete = (task: TableItem) => {
-    closeModal()
-    deleteItem(task.id)
+    taskStore.closeModal()
+    itemsStore.deleteItem(task.id)
 }
 </script>
 
 <template>
-    <div class="back" @click="closeModal"></div>
-    <div class="modal" v-if="task">
+    <div
+        v-if="taskStore.showModal"
+        class="back"
+        @click="taskStore.closeModal"
+    ></div>
+
+    <div class="modal" v-if="taskStore.showModal && taskStore.task">
         <div class="modal__content">
             <div class="top">
-                <button class="close" @click="closeModal">
+                <button class="close" @click="taskStore.closeModal">
                     <img
                         src="../assets/close.png"
                         alt="закрыть"
                         class="close__img"
                     />
                 </button>
-                <h2 class="modal__title">{{ task?.title }}</h2>
+                <h2 class="modal__title">{{ taskStore.task.title }}</h2>
                 <div class="modal__text">
                     <div class="text__item">
                         <span>Статус: </span>
                         <label class="status-checkbox">
                             <input
                                 type="checkbox"
-                                :checked="task?.status === 'выполненные'"
-                                @change="toggleStatus"
+                                :checked="
+                                    taskStore.task.status === 'выполненные'
+                                "
+                                @change="taskStore.toggleStatus"
                                 class="status-checkbox__input"
                             />
                             <span class="status-checkbox__checkmark"></span>
                             <span class="status-checkbox__text">
                                 {{
-                                    task?.status === 'выполненные'
+                                    taskStore.task.status === 'выполненные'
                                         ? 'Выполнено'
                                         : 'Не выполнено'
                                 }}
@@ -56,14 +54,17 @@ const handleDelete = (task: TableItem) => {
                     </div>
                     <div class="text__item">
                         <span>Теги:</span>
-                        <div class="content-1" v-if="isChanged">
+                        <div class="content-1" v-if="taskStore.isChanged">
                             <input
                                 type="text"
-                                v-model="newTags"
-                                @keyup.enter="confirmTags"
+                                v-model="taskStore.newTags"
+                                @keyup.enter="taskStore.confirmTags"
                                 placeholder="Введите теги"
                             />
-                            <button @click="confirmTags" class="confirm-button">
+                            <button
+                                @click="taskStore.confirmTags"
+                                class="confirm-button"
+                            >
                                 <img
                                     src="../assets/check.png"
                                     alt="подтвердить"
@@ -71,17 +72,22 @@ const handleDelete = (task: TableItem) => {
                             </button>
                         </div>
                         <div class="content-2" v-else>
-                            <span class="tags-text">{{
-                                task?.tags || 'Нет тегов'
-                            }}</span>
-                            <button @click="changeTags" class="edit-button">
+                            <span class="tags-text">
+                                {{ taskStore.task.tags || 'Нет тегов' }}
+                            </span>
+                            <button
+                                @click="taskStore.changeTags"
+                                class="edit-button"
+                            >
                                 <img src="../assets/pen.png" alt="изменить" />
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-            <button class="delete" @click="handleDelete(task)">Удалить</button>
+            <button class="delete" @click="handleDelete(taskStore.task)">
+                Удалить
+            </button>
         </div>
     </div>
 </template>

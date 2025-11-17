@@ -1,23 +1,23 @@
 <script setup lang="ts">
 import { useAutoAnimate } from '@formkit/auto-animate/vue'
 import type { TableItem } from '@/types/table'
-import { useTask } from '@/hooks/useTask'
+import { useTaskStore } from '@/store/task'
 
 interface Props {
     items: TableItem[]
     onToggleStatus: (id: number) => void
     onDelete: (id: number) => void
     onDragStart: (event: DragEvent, item: TableItem) => void
-    onDragOver: (event: DragEvent, item: TableItem) => void
-    onDragEnter: (event: DragEvent) => void
+    onDragOver: (event: DragEvent) => void
+    onDragEnter: (event: DragEvent, index: number) => void // Добавляем index
     onDragLeave: (event: DragEvent) => void
-    onDrop: (event: DragEvent) => void
+    onDrop: (event: DragEvent, index: number) => void // Добавляем index
     onDragEnd: (event: DragEvent) => void
 }
 
 defineProps<Props>()
 
-const { pickTask } = useTask()
+const taskStore = useTaskStore()
 
 const handleRowClick = (item: TableItem, event: MouseEvent) => {
     if (
@@ -27,7 +27,8 @@ const handleRowClick = (item: TableItem, event: MouseEvent) => {
     ) {
         return
     }
-    pickTask(item)
+    taskStore.task = item
+    taskStore.showModal = true
 }
 
 const [tbody] = useAutoAnimate()
@@ -46,7 +47,7 @@ const [tbody] = useAutoAnimate()
             </thead>
             <tbody ref="tbody">
                 <tr
-                    v-for="item in items"
+                    v-for="(item, index) in items"
                     :key="item.id"
                     class="table__item"
                     :class="{
@@ -54,10 +55,10 @@ const [tbody] = useAutoAnimate()
                     }"
                     draggable="true"
                     @dragstart="onDragStart($event, item)"
-                    @dragover="onDragOver($event, item)"
-                    @dragenter="onDragEnter($event)"
+                    @dragover="onDragOver($event)"
+                    @dragenter="onDragEnter($event, index)"
                     @dragleave="onDragLeave($event)"
-                    @drop="onDrop($event)"
+                    @drop="onDrop($event, index)"
                     @dragend="onDragEnd($event)"
                     @click="handleRowClick(item, $event)"
                 >

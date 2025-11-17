@@ -1,22 +1,19 @@
+import { useItemsStore } from '@/store/items'
 import { computed } from 'vue'
-import { useTable } from './useTable'
 
 export const useProgress = () => {
-    const { stats } = useTable()
+    const itemsStore = useItemsStore()
 
     const completedTasks = computed(() => {
-        const value = stats.value.completed
-        return value
+        return itemsStore.stats.completed
     })
 
     const totalTasks = computed(() => {
-        const value = stats.value.total
-        return value
+        return itemsStore.stats.total
     })
 
     const progress = computed(() => {
-        const value = stats.value.completionRate
-        return value
+        return itemsStore.stats.completionRate
     })
 
     const circumference = 2 * Math.PI * 45

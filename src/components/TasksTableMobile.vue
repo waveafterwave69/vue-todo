@@ -1,22 +1,23 @@
 <script setup lang="ts">
-import { useTask } from '@/hooks/useTask'
+import { useAutoAnimate } from '@formkit/auto-animate/vue'
 import type { TableItem } from '@/types/table'
+import { useTaskStore } from '@/store/task'
 
 interface Props {
     items: TableItem[]
     onToggleStatus: (id: number) => void
     onDelete: (id: number) => void
     onDragStart: (event: DragEvent, item: TableItem) => void
-    onDragOver: (event: DragEvent, item: TableItem) => void
-    onDragEnter: (event: DragEvent) => void
+    onDragOver: (event: DragEvent) => void
+    onDragEnter: (event: DragEvent, index: number) => void // Добавляем index
     onDragLeave: (event: DragEvent) => void
-    onDrop: (event: DragEvent) => void
+    onDrop: (event: DragEvent, index: number) => void // Добавляем index
     onDragEnd: (event: DragEvent) => void
 }
 
 defineProps<Props>()
 
-const { pickTask } = useTask()
+const taskStore = useTaskStore()
 
 const handleRowClick = (item: TableItem, event: MouseEvent) => {
     if (
@@ -26,58 +27,78 @@ const handleRowClick = (item: TableItem, event: MouseEvent) => {
     ) {
         return
     }
-    pickTask(item)
+    taskStore.task = item
+    taskStore.showModal = true
 }
+
+const [tbody] = useAutoAnimate()
 </script>
 
 <template>
-    <div class="table-mobile">
-        <div
-            v-for="item in items"
-            :key="item.id"
-            class="table-mobile__item"
-            :class="{ 'item--completed': item.status === 'выполненные' }"
-            draggable="true"
-            @dragstart="onDragStart($event, item)"
-            @dragover="onDragOver($event, item)"
-            @dragenter="onDragEnter($event)"
-            @dragleave="onDragLeave($event)"
-            @drop="onDrop($event)"
-            @dragend="onDragEnd($event)"
-            @click="handleRowClick(item, $event)"
-        >
-            <div class="table-mobile__main">
-                <label class="status-checkbox status-checkbox--mobile">
-                    <input
-                        type="checkbox"
-                        :checked="item.status === 'выполненные'"
-                        @change="onToggleStatus(item.id)"
-                        class="status-checkbox__input"
-                    />
-                    <span class="status-checkbox__checkmark"></span>
-                </label>
-
-                <div class="table-mobile__content">
-                    <div class="table-mobile__header">
-                        <div
-                            class="table-mobile__title"
+    <div class="table-container">
+        <table class="table table--desktop">
+            <thead>
+                <tr class="table__header">
+                    <th class="status-column">Статус</th>
+                    <th class="title-column">Заголовок</th>
+                    <th class="tags-column">Теги</th>
+                    <th class="actions-column">Действия</th>
+                </tr>
+            </thead>
+            <tbody ref="tbody">
+                <tr
+                    v-for="(item, index) in items"
+                    :key="item.id"
+                    class="table__item"
+                    :class="{
+                        'item--completed': item.status === 'выполненные',
+                    }"
+                    draggable="true"
+                    @dragstart="onDragStart($event, item)"
+                    @dragover="onDragOver($event)"
+                    @dragenter="onDragEnter($event, index)"
+                    @dragleave="onDragLeave($event)"
+                    @drop="onDrop($event, index)"
+                    @dragend="onDragEnd($event)"
+                    @click="handleRowClick(item, $event)"
+                >
+                    <td class="status">
+                        <label class="status-checkbox">
+                            <input
+                                type="checkbox"
+                                :checked="item.status === 'выполненные'"
+                                @change="onToggleStatus(item.id)"
+                                class="status-checkbox__input"
+                            />
+                            <span class="status-checkbox__checkmark"></span>
+                            <span class="status-checkbox__text">
+                                {{
+                                    item.status === 'выполненные'
+                                        ? 'Выполнено'
+                                        : 'Не выполнено'
+                                }}
+                            </span>
+                        </label>
+                    </td>
+                    <td class="title">
+                        <span
+                            class="title-text"
                             :class="{
                                 'title--completed':
                                     item.status === 'выполненные',
                             }"
                         >
                             {{ item.title }}
-                        </div>
-                    </div>
-
-                    <div class="table-mobile__tags">
+                        </span>
+                    </td>
+                    <td class="tags">
                         <div class="tags-container">
                             <span
                                 v-for="tag in item.tags
                                     .split(',')
                                     .map((t) => t.trim())"
                                 :key="tag"
-                                class="tag tag--mobile"
+                                class="tag"
                                 :class="{
                                     'tag--completed':
                                         item.status === 'выполненные',
@@ -86,26 +107,33 @@ const handleRowClick = (item: TableItem, event: MouseEvent) => {
                                 {{ tag }}
                             </span>
                         </div>
-                    </div>
-                </div>
-
-                <button
-                    class="table-mobile__delete"
-                    @click="onDelete(item.id)"
-                    title="Удалить задачу"
-                >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                        <path
-                            d="M6 7V18C6 19.1046 6.89543 20 8 20H16C17.1046 20 18 19.1046 18 18V7M6 7H5M6 7H8M18 7H19M18 7H16M10 11V16M14 11V16M8 7V5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5V7M8 7H16"
-                            stroke="currentColor"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        />
-                    </svg>
-                </button>
-            </div>
-        </div>
+                    </td>
+                    <td class="actions">
+                        <button
+                            class="delete-button"
+                            @click="onDelete(item.id)"
+                            type="button"
+                            title="Удалить задачу"
+                        >
+                            <svg
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                            >
+                                <path
+                                    d="M6 7V18C6 19.1046 6.89543 20 8 20H16C17.1046 20 18 19.1046 18 18V7M6 7H5M6 7H8M18 7H19M18 7H16M10 11V16M14 11V16M8 7V5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5V7M8 7H16"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 

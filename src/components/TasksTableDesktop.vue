@@ -146,6 +146,7 @@ const [tbody] = useAutoAnimate()
 
 .table--desktop {
     border-collapse: collapse;
+    background-color: var(--color-white);
     min-width: 800px;
     width: 100%;
     margin-bottom: 20px;
@@ -180,7 +181,7 @@ const [tbody] = useAutoAnimate()
 }
 
 .table__item {
-    background-color: white;
+    background-color: var(--color-white);
     border-bottom: 1px solid #f1f3f4;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: grab;

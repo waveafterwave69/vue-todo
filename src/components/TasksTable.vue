@@ -94,6 +94,7 @@ onUnmounted(() => {
 
 .create__input {
     border: 1px solid var(--color-purple);
+    background-color: var(--color-white);
     width: 100%;
     font-size: 18px;
     border-radius: 5px;

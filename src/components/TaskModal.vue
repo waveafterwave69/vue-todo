@@ -72,9 +72,11 @@ const handleDelete = (task: TableItem) => {
                             </button>
                         </div>
                         <div class="content-2" v-else>
-                            <span class="tags-text">
-                                {{ taskStore.task.tags || 'Нет тегов' }}
-                            </span>
+                            <div class="tags-wrapper">
+                                <span class="tags-text">
+                                    {{ taskStore.task.tags || 'Нет тегов' }}
+                                </span>
+                            </div>
                             <button
                                 @click="taskStore.changeTags"
                                 class="edit-button"
@@ -231,8 +233,48 @@ img {
     background-color: rgba(0, 0, 0, 0.05);
 }
 
+.tags-wrapper {
+    max-width: 300px;
+    max-height: 80px;
+    overflow-y: auto;
+}
+
 .tags-text {
     font-style: italic;
+    word-wrap: break-word;
+    word-break: break-word;
+    display: block;
+}
+
+/* Стили для скроллбара */
+.tags-wrapper::-webkit-scrollbar {
+    width: 4px;
+}
+
+.tags-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 2px;
+}
+
+.tags-wrapper::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 2px;
+}
+
+.tags-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+[data-theme='dark'] .tags-wrapper::-webkit-scrollbar-track {
+    background: #2d3748;
+}
+
+[data-theme='dark'] .tags-wrapper::-webkit-scrollbar-thumb {
+    background: #4a5568;
+}
+
+[data-theme='dark'] .tags-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #718096;
 }
 
 .confirm-button,
@@ -365,6 +407,11 @@ img {
         font-size: 16px;
         min-width: 150px;
     }
+
+    .tags-wrapper {
+        max-width: 200px;
+        max-height: 60px;
+    }
 }
 
 @media (max-width: 425px) {
@@ -406,6 +453,11 @@ img {
         border-radius: 4px;
         font-size: 16px;
         min-width: 150px;
+    }
+
+    .tags-wrapper {
+        max-width: 150px;
+        max-height: 50px;
     }
 }
 </style>

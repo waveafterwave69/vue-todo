@@ -60,7 +60,7 @@ const categoryOptions = computed(() => {
                 </svg>
             </button>
 
-            <img src="../assets/search.svg" alt="Поиск" />
+            <img src="../assets/search.svg" alt="Поиск" class="search-icon" />
         </div>
         <div class="option__content">
             <SelectUI
@@ -95,15 +95,33 @@ const categoryOptions = computed(() => {
     background-color: var(--color-white);
     font-size: 16px;
     width: 300px;
+    position: relative;
 }
 
-.search__content img {
+.search-icon {
     width: 17px;
+    height: 17px;
+    /* Фильтр для светлой темы - темные иконки */
+    filter: invert(0);
+    transition: filter var(--transition-duration) ease;
+}
+
+/* Темная тема - светлые иконки */
+[data-theme='dark'] .search-icon {
+    filter: invert(1);
 }
 
 .search__input {
     padding-right: 20px;
     width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--color-text-primary);
+}
+
+.search__input::placeholder {
+    color: var(--color-text-secondary);
 }
 
 .clear-button {
@@ -116,7 +134,7 @@ const categoryOptions = computed(() => {
     margin-right: 5px;
     border: none;
     border-radius: 4px;
-    color: #6b7280;
+    color: var(--color-text-secondary);
     cursor: pointer;
     opacity: 0.7;
     transition: all 0.2s ease;
@@ -125,9 +143,9 @@ const categoryOptions = computed(() => {
 }
 
 .clear-button:hover {
-    color: #ef4444;
+    color: var(--color-danger);
     opacity: 1;
-    background-color: #fef2f2;
+    background-color: var(--color-danger-hover);
 }
 
 .option__content {
@@ -169,8 +187,9 @@ const categoryOptions = computed(() => {
         row-gap: 8px;
     }
 
-    .search__content img {
+    .search-icon {
         width: 15px;
+        height: 15px;
     }
 }
 </style>

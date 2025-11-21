@@ -21,12 +21,15 @@ export const useTaskStore = defineStore('task', () => {
     const closeModal = () => {
         task.value = null
         isChanged.value = false
-        newTags.value = ''
         showModal.value = false
     }
 
     const changeTags = () => {
         isChanged.value = true
+
+        if (task.value && task.value.tags) {
+            newTags.value = task.value.tags
+        }
     }
 
     const confirmTags = () => {

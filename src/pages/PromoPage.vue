@@ -68,7 +68,7 @@ import { RouterLink } from 'vue-router'
     font-weight: 600;
     font-size: 19px;
     text-align: center;
-    color: var(--color-white);
+    color: #fafafa;
     background-color: var(--color-purple);
     padding: 15px 0px;
     justify-content: center;

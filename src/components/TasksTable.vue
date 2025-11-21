@@ -105,7 +105,7 @@ onUnmounted(() => {
     background-color: var(--color-purple);
     padding: 15px 35px;
     font-size: 18px;
-    color: var(--color-white);
+    color: #fafafa;
     border-radius: 5px;
 }
 

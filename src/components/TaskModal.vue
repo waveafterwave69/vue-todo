@@ -105,7 +105,9 @@ const handleDelete = (task: TableItem) => {
 }
 
 .modal {
-    background-color: var(--color-white);
+    backdrop-filter: blur(20px);
+    background-color: var(--color-text-primary-modal);
+    border: 1px solid var(--color-purple);
     position: fixed;
     z-index: 5;
     width: 500px;
@@ -146,13 +148,22 @@ const handleDelete = (task: TableItem) => {
 img {
     width: 20px;
     height: 20px;
+    /* Фильтр для светлой темы - темные иконки */
+    filter: invert(0);
+    transition: filter var(--transition-duration) ease;
+}
+
+/* Темная тема - светлые иконки */
+[data-theme='dark'] .close__img,
+[data-theme='dark'] img {
+    filter: invert(1);
 }
 
 .modal__title {
     font-size: 24px;
     font-weight: 600;
     margin-bottom: 20px;
-    color: #333;
+    color: var(--color-text-primary);
 }
 
 .modal__text {
@@ -164,7 +175,7 @@ img {
 .delete {
     width: 100%;
     background-color: rgb(218, 46, 46);
-    color: var(--color-white);
+    color: #fafafa;
     padding: 12px;
     font-size: 18px;
     border: none;
@@ -181,6 +192,7 @@ img {
     display: flex;
     column-gap: 8px;
     align-items: center;
+    color: var(--color-text-primary);
 }
 
 .content-1,
@@ -282,7 +294,7 @@ img {
 
 .status-checkbox__text {
     font-size: 16px;
-    color: #333;
+    color: var(--color-text-primary);
     user-select: none;
 }
 

@@ -120,7 +120,7 @@ const handleRowClick = (item: TableItem, event: MouseEvent) => {
 }
 
 .table-mobile__item {
-    background: white;
+    background-color: var(--color-white);
     border: 1px solid var(--color-purple);
     border-radius: 16px;
     padding: 20px;
@@ -128,19 +128,9 @@ const handleRowClick = (item: TableItem, event: MouseEvent) => {
     cursor: grab;
 }
 
-.table-mobile__item:hover {
-    background-color: #f8fafc;
-    transform: translateY(-1px);
-}
-
 .table-mobile__item:active {
     cursor: grabbing;
     transform: translateY(0);
-}
-
-.table-mobile__item.item--completed {
-    background-color: #f8f9fa;
-    border: 1px solid var(--color-purple);
 }
 
 :deep(.table-mobile__item.dragging) {

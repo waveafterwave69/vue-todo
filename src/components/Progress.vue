@@ -102,6 +102,7 @@ const {
     font-size: 18px;
     opacity: 0.9;
     line-height: 1.4;
+    color: var(--color-text-primary);
 }
 
 .progress__diagram {

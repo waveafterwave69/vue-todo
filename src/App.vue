@@ -1,5 +1,14 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
+import { onMounted } from 'vue'
+import { useThemeStore } from '@/store/theme'
+
+const themeStore = useThemeStore()
+
+onMounted(() => {
+    themeStore.initializeTheme()
+    themeStore.setupSystemThemeListener()
+})
 </script>
 
 <template>
@@ -8,4 +17,21 @@ import { RouterView } from 'vue-router'
     </div>
 </template>
 
-<style scoped></style>
+<style>
+/* Базовые стили приложения */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: background-color var(--transition-duration) ease,
+        color var(--transition-duration) ease,
+        border-color var(--transition-duration) ease;
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: var(--font-family);
+    line-height: 1.6;
+}
+</style>

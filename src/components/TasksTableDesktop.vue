@@ -194,10 +194,6 @@ const [tbody] = useAutoAnimate()
     transform: translateY(0);
 }
 
-.table__item.item--completed {
-    background-color: #f8f9fa;
-}
-
 :deep(.table__item.dragging) {
     opacity: 0.7;
     box-shadow: 0 8px 24px rgba(135, 100, 255, 0.2);
@@ -259,13 +255,13 @@ const [tbody] = useAutoAnimate()
 
 .status-checkbox__text {
     font-size: 16px;
-    color: #2d3748;
+    color: var(--color-text-primary);
     font-weight: 500;
 }
 
 .title-text {
     font-size: 18px;
-    color: #2d3748;
+    color: var(--color-text-primary);
     font-weight: 500;
     line-height: 1.4;
 }

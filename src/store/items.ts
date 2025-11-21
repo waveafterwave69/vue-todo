@@ -152,6 +152,7 @@ export const useItemsStore = defineStore('items', () => {
 
     const addItem = () => {
         if (!newTaskTitle.value.trim()) return
+        if (!newTaskTags.value.trim()) return
 
         const newItem: TableItem = {
             status: 'не выполненные',

@@ -245,7 +245,7 @@ const themeStore = useThemeStore()
     }
 }
 
-@media (max-width: 375px) {
+@media (max-width: 475px) {
     .header__time {
         font-size: 24px;
     }

@@ -106,7 +106,7 @@ const clearValue = () => {
 }
 
 .custom-select.placeholder {
-    color: #6b7280;
+    color: var(--color-text-secondary);
 }
 
 .select-arrow {

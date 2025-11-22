@@ -99,7 +99,7 @@ const handleDelete = (task: TableItem) => {
     background-color: black;
     top: 0;
     left: 0;
-    opacity: 0.4;
+    opacity: 0.5;
     z-index: 3;
     position: fixed;
     width: 100%;

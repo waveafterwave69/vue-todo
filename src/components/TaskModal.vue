@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useItemsStore } from '@/store/items'
 import { useTaskStore } from '@/store/task'
-import type { TableItem } from '@/types/table'
+import { TableItem } from '@/types'
 
 const taskStore = useTaskStore()
 const itemsStore = useItemsStore()

@@ -1,90 +1,103 @@
 import { defineStore } from 'pinia'
-import { ref, computed, watch } from 'vue'
-import type { TableItem } from '@/types/table'
+import { ref, computed } from 'vue'
 import { useSearchStore } from './search'
-
-// Ключ для localStorage
-const STORAGE_KEY = 'vue-tasks-app'
-
-// Функции для работы с localStorage выносим наружу или объявляем до использования
-const loadFromStorage = (): TableItem[] => {
-    try {
-        const stored = localStorage.getItem(STORAGE_KEY)
-        if (stored) {
-            return JSON.parse(stored)
-        }
-    } catch (error) {
-        console.error('Ошибка при загрузке из localStorage:', error)
-    }
-
-    // Если в localStorage ничего нет, возвращаем пустой массив
-    return []
-}
-
-const saveToStorage = (items: TableItem[]) => {
-    try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
-    } catch (error) {
-        console.error('Ошибка при сохранении в localStorage:', error)
-    }
-}
-
-const isValidTableItem = (item: any): item is TableItem => {
-    return (
-        typeof item === 'object' &&
-        typeof item.id === 'number' &&
-        typeof item.title === 'string' &&
-        typeof item.tags === 'string' &&
-        (item.status === 'выполненные' || item.status === 'не выполненные')
-    )
-}
+import { authService } from '@/services/auth'
+import { todoService } from '@/services/todos'
+import type { User } from 'firebase/auth'
+import type { Unsubscribe } from 'firebase/firestore'
+import { TableItem } from '@/types'
 
 export const useItemsStore = defineStore('items', () => {
     const newTaskTitle = ref('')
     const newTaskTags = ref('')
+    const allItems = ref<TableItem[]>([])
+    const loading = ref(false)
+    const error = ref<string | null>(null)
+    const unsubscribe = ref<Unsubscribe | null>(null)
+    const initialized = ref(false)
 
-    // Загружаем данные из localStorage при инициализации
-    const allItems = ref<TableItem[]>(loadFromStorage())
+    // Получаем текущего пользователя
+    const getCurrentUser = (): User => {
+        const user = authService.getCurrentUser()
+        if (!user) {
+            throw new Error(
+                'Пользователь не авторизован. Пожалуйста, войдите снова.'
+            )
+        }
+        return user
+    }
+
+    // Инициализация хранилища
+    const initialize = async (): Promise<void> => {
+        try {
+            const user = getCurrentUser()
+
+            loading.value = true
+            error.value = null
+            initialized.value = false
+
+            // Подписываемся на изменения задач пользователя
+            unsubscribe.value = todoService.subscribeToTodos(
+                user.uid,
+                (items: TableItem[]) => {
+                    allItems.value = items
+                    loading.value = false
+                    initialized.value = true
+                    error.value = null
+                }
+            )
+        } catch (err) {
+            console.error('❌ Error initializing items store:', err)
+            error.value =
+                err instanceof Error
+                    ? err.message
+                    : 'Ошибка инициализации хранилища'
+            loading.value = false
+            initialized.value = false
+            throw err
+        }
+    }
+
+    // Очистка подписки
+    const cleanup = (): void => {
+        if (unsubscribe.value) {
+            unsubscribe.value()
+            unsubscribe.value = null
+        }
+        allItems.value = []
+        initialized.value = false
+        loading.value = false
+    }
 
     // Getters
-    const items = computed({
-        get: () => {
-            const searchStore = useSearchStore()
-            let result = allItems.value
+    const items = computed(() => {
+        const searchStore = useSearchStore()
+        let result = allItems.value
 
-            // Фильтрация по поиску (название)
-            if (searchStore.searchValue) {
-                const searchTerm = searchStore.searchValue.toLowerCase().trim()
-                result = result.filter((item) =>
-                    item.title.toLowerCase().includes(searchTerm)
-                )
-            }
-
-            // Фильтрация по статусу
-            if (searchStore.statusValue) {
-                result = result.filter(
-                    (item) => item.status === searchStore.statusValue
-                )
-            }
-
-            // Фильтрация по тегу
-            if (searchStore.tagValue) {
-                const tagTerm = searchStore.tagValue.toLowerCase().trim()
-                result = result.filter((item) =>
-                    item.tags.toLowerCase().includes(tagTerm)
-                )
-            }
-
-            return result
-        },
-        set: (value: TableItem[]) => {
-            // При изменении items (например, при drag & drop) обновляем allItems
-            // Но нужно быть осторожным, так как value - это отфильтрованный массив
-            // Вместо этого лучше использовать отдельный action для изменения порядка
-            console.warn(
-                'Прямое присваивание items не рекомендуется. Используйте reorderItems.'
+        // Фильтрация по поиску (название)
+        if (searchStore.searchValue) {
+            const searchTerm = searchStore.searchValue.toLowerCase().trim()
+            result = result.filter((item) =>
+                item.title.toLowerCase().includes(searchTerm)
             )
-        },
+        }
+
+        // Фильтрация по статусу
+        if (searchStore.statusValue) {
+            result = result.filter(
+                (item) => item.status === searchStore.statusValue
+            )
+        }
+
+        // Фильтрация по тегу
+        if (searchStore.tagValue) {
+            const tagTerm = searchStore.tagValue.toLowerCase().trim()
+            result = result.filter((item) =>
+                item.tags.toLowerCase().includes(tagTerm)
+            )
+        }
+
+        return result
     })
 
     const stats = computed(() => {
@@ -104,126 +117,117 @@ export const useItemsStore = defineStore('items', () => {
         }
     })
 
-    // Общие статистики по всем задачам (без фильтров)
-    const totalStats = computed(() => {
-        const total = allItems.value.length
-        const completed = allItems.value.filter(
-            (item) => item.status === 'выполненные'
-        ).length
-        const pending = total - completed
-        const completionRate = total > 0 ? (completed / total) * 100 : 0
-
-        return {
-            total,
-            completed,
-            pending,
-            completionRate,
-        }
-    })
-
-    // Автоматически сохраняем в localStorage при изменении данных
-    watch(
-        allItems,
-        (newItems) => {
-            saveToStorage(newItems)
-        },
-        { deep: true }
-    )
-
     // Actions для задач
-    const deleteItem = (id: number) => {
-        allItems.value = allItems.value.filter((item) => item.id !== id)
-    }
-
-    const updateItem = (id: number, updates: Partial<TableItem>) => {
-        const index = allItems.value.findIndex((item) => item.id === id)
-        if (index !== -1) {
-            allItems.value[index] = { ...allItems.value[index], ...updates }
-        }
-    }
-
-    const toggleStatus = (id: number) => {
-        const item = allItems.value.find((item) => item.id === id)
-        if (item) {
-            item.status =
-                item.status === 'выполненные' ? 'не выполненные' : 'выполненные'
-        }
-    }
-
-    const addItem = () => {
-        if (!newTaskTitle.value.trim()) return
-        if (!newTaskTags.value.trim()) return
-
-        const newItem: TableItem = {
-            status: 'не выполненные',
-            tags: newTaskTags.value.trim(),
-            title: newTaskTitle.value.trim(),
-            id: generateId(),
-        }
-        allItems.value.push(newItem)
-
-        // Очищаем поля после добавления
-        newTaskTitle.value = ''
-        newTaskTags.value = ''
-    }
-
-    const clearNewTaskFields = () => {
-        newTaskTitle.value = ''
-        newTaskTags.value = ''
-    }
-
-    // Action для изменения порядка (для drag & drop)
-    const reorderItems = (fromIndex: number, toIndex: number) => {
-        if (fromIndex === toIndex) return
-
-        const itemsCopy = [...allItems.value]
-        const [movedItem] = itemsCopy.splice(fromIndex, 1)
-        itemsCopy.splice(toIndex, 0, movedItem)
-        allItems.value = itemsCopy
-    }
-
-    const reorderItemsById = (itemId: number, toIndex: number) => {
-        const fromIndex = allItems.value.findIndex((item) => item.id === itemId)
-        if (fromIndex !== -1 && fromIndex !== toIndex) {
-            reorderItems(fromIndex, toIndex)
-        }
-    }
-
-    const clearStorage = () => {
+    const deleteItem = async (id: number): Promise<void> => {
         try {
-            localStorage.removeItem(STORAGE_KEY)
-            allItems.value = []
-        } catch (error) {
-            console.error('Ошибка при очистке localStorage:', error)
+            const user = getCurrentUser()
+
+            const firebaseId = id.toString()
+
+            await todoService.deleteTodo(firebaseId)
+        } catch (err) {
+            const message =
+                err instanceof Error ? err.message : 'Ошибка удаления задачи'
+            console.error('❌ Store: Delete error:', err)
+            error.value = message
+            throw new Error(message)
         }
     }
 
-    const exportData = (): string => {
-        return JSON.stringify(allItems.value, null, 2)
+    const updateItem = async (
+        id: number,
+        updates: Partial<TableItem>
+    ): Promise<void> => {
+        try {
+            const user = getCurrentUser()
+
+            const firebaseId = id.toString()
+            await todoService.updateTodo(firebaseId, updates)
+        } catch (err) {
+            const message =
+                err instanceof Error ? err.message : 'Ошибка обновления задачи'
+            console.error('❌ Error updating item:', err)
+            error.value = message
+            throw new Error(message)
+        }
     }
 
-    const importData = (jsonData: string) => {
+    const toggleStatus = async (id: number): Promise<void> => {
         try {
-            const data = JSON.parse(jsonData)
-            if (Array.isArray(data) && data.every(isValidTableItem)) {
-                allItems.value = data
-                return true
+            const item = allItems.value.find((item) => item.id === id)
+            if (item) {
+                const newStatus =
+                    item.status === 'выполненные'
+                        ? 'не выполненные'
+                        : 'выполненные'
+                await updateItem(id, { status: newStatus })
             }
-            return false
-        } catch (error) {
-            console.error('Ошибка при импорте данных:', error)
+        } catch (err) {
+            const message =
+                err instanceof Error ? err.message : 'Ошибка изменения статуса'
+            console.error('❌ Error toggling status:', err)
+            error.value = message
+            throw new Error(message)
+        }
+    }
+
+    const addItem = async (): Promise<void> => {
+        try {
+            if (!newTaskTitle.value.trim()) {
+                throw new Error('Заголовок задачи не может быть пустым')
+            }
+
+            const user = getCurrentUser()
+
+            loading.value = true
+
+            await todoService.addTodo(
+                newTaskTitle.value.trim(),
+                newTaskTags.value.trim(),
+                user.uid
+            )
+
+            // Очищаем поля после успешного добавления
+            newTaskTitle.value = ''
+            newTaskTags.value = ''
+
+            loading.value = false
+        } catch (err) {
+            const message =
+                err instanceof Error ? err.message : 'Ошибка добавления задачи'
+            console.error('❌ Error adding item:', err)
+            error.value = message
+            throw new Error(message)
+        }
+    }
+
+    const clearNewTaskFields = (): void => {
+        newTaskTitle.value = ''
+        newTaskTags.value = ''
+    }
+
+    // Проверка авторизации
+    const checkAuth = (): boolean => {
+        try {
+            getCurrentUser()
+            return true
+        } catch {
             return false
         }
     }
 
-    const generateId = (): number => {
-        return Math.max(0, ...allItems.value.map((i) => i.id), 0) + 1
+    // Сброс ошибки
+    const clearError = (): void => {
+        error.value = null
     }
 
     return {
         // State
         newTaskTitle,
         newTaskTags,
+        loading: computed(() => loading.value),
+        error: computed(() => error.value),
+        initialized: computed(() => initialized.value),
 
         // State (readonly через computed)
         items,
@@ -231,7 +235,11 @@ export const useItemsStore = defineStore('items', () => {
 
         // Getters
         stats,
-        totalStats,
+
+        // Инициализация и очистка
+        initialize,
+        cleanup,
+        checkAuth,
 
         // Actions для задач
         deleteItem,
@@ -239,12 +247,8 @@ export const useItemsStore = defineStore('items', () => {
         toggleStatus,
         addItem,
         clearNewTaskFields,
-        reorderItems,
-        reorderItemsById,
 
-        // LocalStorage actions
-        clearStorage,
-        exportData,
-        importData,
+        // Дополнительные actions
+        clearError,
     }
 })

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { TableItem } from '@/types/table'
 import { useItemsStore } from './items'
+import type { TableItem } from '@/types'
 
 export const useDragDropStore = defineStore('dragAndDrop', () => {
     const draggedItem = ref<TableItem | null>(null)
@@ -49,7 +49,7 @@ export const useDragDropStore = defineStore('dragAndDrop', () => {
 
             // Находим индекс в исходном массиве (allItems)
             const fromIndex = itemsStore.allItems.findIndex(
-                (item) => item.id === itemId
+                (item: TableItem) => item.id === itemId
             )
 
             if (fromIndex !== -1 && fromIndex !== index) {
@@ -62,7 +62,7 @@ export const useDragDropStore = defineStore('dragAndDrop', () => {
         draggedItem.value = null
     }
 
-    const handleDragEnd = () => {
+    const handleDragEnd = (event: DragEvent) => {
         dragOverIndex.value = null
         draggedItem.value = null
     }

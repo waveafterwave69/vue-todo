@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAutoAnimate } from '@formkit/auto-animate/vue'
-import type { TableItem } from '@/types/table'
 import { useTaskStore } from '@/store/task'
+import { TableItem } from '@/types'
 
 interface Props {
     items: TableItem[]

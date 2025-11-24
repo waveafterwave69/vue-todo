@@ -2,6 +2,7 @@
 import { RouterView } from 'vue-router'
 import { onMounted } from 'vue'
 import { useThemeStore } from '@/store/theme'
+import NavBar from './components/NavBar.vue'
 
 const themeStore = useThemeStore()
 
@@ -12,6 +13,7 @@ onMounted(() => {
 </script>
 
 <template>
+    <NavBar />
     <div class="container">
         <RouterView />
     </div>

@@ -9,10 +9,9 @@ import { RouterLink } from 'vue-router'
                 <h1 class="promo__title">Управление задачами & To-Do List</h1>
                 <div class="text__content">
                     <p class="promo__text">
-                        Этот инструмент создан, чтобы помочь вам лучше
-                        справляться со своими задачи быстро и удобно!
+                        Этот инструмент создан, чтобы помочь вам быстро и удобно
+                        справляться со своими задачами!
                     </p>
-                    <p class="promo__text">Все задачи храняться локально.</p>
                 </div>
 
                 <RouterLink to="/home" class="promo__button">

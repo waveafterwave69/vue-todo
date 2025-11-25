@@ -9,39 +9,22 @@ export const useTaskStore = defineStore('task', () => {
     const isChanged = ref(false)
     const newTags = ref('')
     const showModal = ref(false)
-    let scrollY = 0
-
-    // Функции управления скроллом
-    const disableScroll = () => {
-        scrollY = window.scrollY
-        document.body.style.overflow = 'hidden'
-        document.body.style.position = 'fixed'
-        document.body.style.width = '100%'
-        document.body.style.top = `-${scrollY}px`
-    }
-
-    const enableScroll = () => {
-        document.body.style.overflow = ''
-        document.body.style.position = ''
-        document.body.style.width = ''
-        document.body.style.top = ''
-        window.scrollTo(0, scrollY)
-    }
 
     // Actions
     const openModal = (selectedTask: TableItem) => {
+        console.log('hddasdsa')
         task.value = selectedTask
         newTags.value = selectedTask.tags
         isChanged.value = false
         showModal.value = true
-        disableScroll() // Управление скроллом здесь
+        document.body.style.overflow = 'hidden'
     }
 
     const closeModal = () => {
         task.value = null
         isChanged.value = false
         showModal.value = false
-        enableScroll() // Управление скроллом здесь
+        document.body.style.overflow = 'auto'
     }
 
     const changeTags = () => {

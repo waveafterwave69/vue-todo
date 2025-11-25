@@ -21,13 +21,12 @@ const taskStore = useTaskStore()
 const handleRowClick = (item: TableItem, event: MouseEvent) => {
     if (
         (event.target as HTMLElement).closest(
-            '.status-checkbox, .table-mobile__delete'
+            '.status-checkbox, .delete-button'
         )
     ) {
         return
     }
-    taskStore.task = item
-    taskStore.showModal = true
+    taskStore.openModal(item)
 }
 </script>
 

@@ -27,8 +27,7 @@ const handleRowClick = (item: TableItem, event: MouseEvent) => {
     ) {
         return
     }
-    taskStore.task = item
-    taskStore.showModal = true
+    taskStore.openModal(item)
 }
 
 const [tbody] = useAutoAnimate()

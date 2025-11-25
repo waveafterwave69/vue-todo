@@ -12,7 +12,6 @@ export const useTaskStore = defineStore('task', () => {
 
     // Actions
     const openModal = (selectedTask: TableItem) => {
-        console.log('hddasdsa')
         task.value = selectedTask
         newTags.value = selectedTask.tags
         isChanged.value = false

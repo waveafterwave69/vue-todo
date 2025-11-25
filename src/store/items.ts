@@ -177,6 +177,10 @@ export const useItemsStore = defineStore('items', () => {
                 throw new Error('Заголовок задачи не может быть пустым')
             }
 
+            if (!newTaskTags.value.trim()) {
+                throw new Error('Теги задачи не может быть пустым')
+            }
+
             const user = getCurrentUser()
 
             loading.value = true

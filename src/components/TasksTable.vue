@@ -127,7 +127,9 @@ onUnmounted(() => {
                 class="create__button"
                 @click="handleAddItem"
                 :disabled="
-                    !itemsStore.newTaskTitle.trim() || itemsStore.loading
+                    !itemsStore.newTaskTitle.trim() ||
+                    !itemsStore.newTaskTags.trim() ||
+                    itemsStore.loading
                 "
             >
                 {{ itemsStore.loading ? 'Создание...' : 'Создать' }}
@@ -178,14 +180,12 @@ onUnmounted(() => {
             class="empty-state"
         >
             <template v-if="currentFilter === 'active'">
-                Нет активных задач
+                Нет активных задач.
             </template>
             <template v-else-if="currentFilter === 'completed'">
-                Нет выполненных задач
+                Нет выполненных задач.
             </template>
-            <template v-else>
-                Нет задач для отображения. Создайте первую задачу!
-            </template>
+            <template v-else> Нет задач для отображения. </template>
         </div>
     </div>
 </template>
@@ -240,9 +240,8 @@ onUnmounted(() => {
 .empty-state {
     text-align: center;
     padding: 60px 40px;
-    color: #666;
+    color: var(--color-primary);
     font-size: 18px;
-    background: #f8f9fa;
     border-radius: 10px;
     margin-bottom: 20px;
 }
@@ -323,16 +322,6 @@ onUnmounted(() => {
     padding: 40px;
     color: #666;
     font-size: 16px;
-}
-
-.empty-state {
-    text-align: center;
-    padding: 60px 40px;
-    color: #666;
-    font-size: 18px;
-    background: #f8f9fa;
-    border-radius: 10px;
-    margin-bottom: 20px;
 }
 
 .todo-stats {

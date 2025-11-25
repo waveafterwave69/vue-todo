@@ -21,7 +21,7 @@ const taskStore = useTaskStore()
 const handleRowClick = (item: TableItem, event: MouseEvent) => {
     if (
         (event.target as HTMLElement).closest(
-            '.status-checkbox, .delete-button'
+            '.status-checkbox, .table-mobile__delete'
         )
     ) {
         return

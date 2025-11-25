@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useTaskStore } from '@/store/task'
-import type { TableItem } from '@/types/table'
+import { TableItem } from '@/types'
 
 interface Props {
     items: TableItem[]

@@ -2,9 +2,86 @@
 import { useItemsStore } from '@/store/items'
 import { useTaskStore } from '@/store/task'
 import { TableItem } from '@/types'
+import { watch, onUnmounted } from 'vue'
 
 const taskStore = useTaskStore()
 const itemsStore = useItemsStore()
+
+let scrollY = 0
+
+// Надежная функция блокировки скролла
+const disableScroll = () => {
+    scrollY = window.scrollY
+
+    // Метод 1: CSS блокировка
+    document.body.style.overflow = 'hidden'
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollY}px`
+    document.body.style.left = '0'
+    document.body.style.right = '0'
+    document.body.style.width = '100%'
+
+    // Метод 2: Предотвращение событий прокрутки
+    document.addEventListener('touchmove', preventScroll, { passive: false })
+    document.addEventListener('wheel', preventScroll, { passive: false })
+    document.addEventListener('keydown', preventKeyScroll)
+}
+
+// Функция разблокировки скролла
+const enableScroll = () => {
+    // Убираем CSS блокировку
+    document.body.style.overflow = ''
+    document.body.style.position = ''
+    document.body.style.top = ''
+    document.body.style.left = ''
+    document.body.style.right = ''
+    document.body.style.width = ''
+
+    // Восстанавливаем позицию скролла
+    window.scrollTo(0, scrollY)
+
+    // Убираем обработчики событий
+    document.removeEventListener('touchmove', preventScroll)
+    document.removeEventListener('wheel', preventScroll)
+    document.removeEventListener('keydown', preventKeyScroll)
+}
+
+// Предотвращение прокрутки касанием/колесом
+const preventScroll = (e: Event) => {
+    e.preventDefault()
+    e.stopPropagation()
+    return false
+}
+
+// Предотвращение прокрутки клавишами
+const preventKeyScroll = (e: KeyboardEvent) => {
+    const keys = ['Space', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown']
+    if (keys.includes(e.code)) {
+        e.preventDefault()
+        e.stopPropagation()
+        return false
+    }
+}
+
+// Следим за изменением состояния модалки
+watch(
+    () => taskStore.showModal,
+    (newValue) => {
+        if (newValue) {
+            disableScroll()
+        } else {
+            enableScroll()
+        }
+    },
+    { immediate: true }
+)
+
+// Обрабатываем размонтирование компонента
+onUnmounted(() => {
+    if (taskStore.showModal) {
+        enableScroll()
+    }
+})
 
 const handleDelete = (task: TableItem) => {
     taskStore.closeModal()

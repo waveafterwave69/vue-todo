@@ -281,7 +281,7 @@ onUnmounted(() => {
     border: 1px solid var(--color-purple, #667eea);
     background-color: var(--color-white, #ffffff);
     width: 100%;
-    font-size: 16px;
+    font-size: 18px;
     border-radius: 5px;
     padding: 12px 15px;
     flex: 1;
@@ -290,7 +290,6 @@ onUnmounted(() => {
 
 .create__input:focus {
     outline: none;
-    border-color: #4caf50;
 }
 
 .create__button {
@@ -364,14 +363,14 @@ onUnmounted(() => {
     }
 
     .create__input {
-        font-size: 14px;
+        font-size: 16px;
         padding: 10px 12px;
         min-width: 100%;
     }
 
     .create__button {
         padding: 10px 25px;
-        font-size: 14px;
+        font-size: 16px;
         width: 100%;
     }
 
@@ -388,13 +387,13 @@ onUnmounted(() => {
     }
 
     .create__input {
-        font-size: 14px;
+        font-size: 16px;
         padding: 8px 10px;
     }
 
     .create__button {
         padding: 8px 20px;
-        font-size: 14px;
+        font-size: 16px;
     }
 
     .empty-state {

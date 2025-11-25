@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { authService } from '@/services/auth'
 import type { User } from 'firebase/auth'
-import { useTaskStore } from '@/store/task'
 import { useDate } from '@/hooks/useDate'
 import { useThemeStore } from '@/store/theme'
 
 const router = useRouter()
 const user = ref<User | null>(null)
+const isShowProfileMenu = ref<boolean>(false)
+const profileMenuRef = ref<HTMLElement | null>(null)
+const profileButtonRef = ref<HTMLElement | null>(null)
 
 const handleLogout = async (): Promise<void> => {
     await authService.logout()
@@ -22,7 +24,36 @@ onMounted(() => {
     authService.onAuthChange((currentUser: User | null) => {
         user.value = currentUser
     })
+
+    // Добавляем обработчик клика по документу
+    document.addEventListener('click', handleClickOutside)
 })
+
+onUnmounted(() => {
+    // Убираем обработчик при размонтировании компонента
+    document.removeEventListener('click', handleClickOutside)
+})
+
+const toggleProfileMenu = () => {
+    isShowProfileMenu.value = !isShowProfileMenu.value
+}
+
+const closeProfileMenu = () => {
+    isShowProfileMenu.value = false
+}
+
+const handleClickOutside = (event: MouseEvent) => {
+    // Проверяем, был ли клик вне меню профиля и кнопки профиля
+    if (
+        isShowProfileMenu.value &&
+        profileMenuRef.value &&
+        !profileMenuRef.value.contains(event.target as Node) &&
+        profileButtonRef.value &&
+        !profileButtonRef.value.contains(event.target as Node)
+    ) {
+        closeProfileMenu()
+    }
+}
 </script>
 
 <template>
@@ -155,7 +186,11 @@ onMounted(() => {
                         </span>
                     </button>
                     <template v-if="user">
-                        <button>
+                        <button
+                            @click="toggleProfileMenu"
+                            ref="profileButtonRef"
+                            class="profile-button"
+                        >
                             <img
                                 src="../assets/user.png"
                                 class="user-img"
@@ -163,42 +198,33 @@ onMounted(() => {
                             />
                         </button>
 
-                        <div class="user__content">
-                            <span class="user-email">{{ user.email }}</span>
-                            <button
-                                @click="handleLogout"
-                                class="btn btn-logout"
-                            >
-                                Выйти
-                            </button>
-                        </div>
+                        <!-- Выносим меню профиля на верхний уровень, вне navbar -->
                     </template>
-                    <!-- <template v-else>
-                        <div class="auth__content">
-                            <router-link to="/auth?tab=login" class="auth__link"
-                                >Войти</router-link
-                            >
-                            <router-link
-                                to="/auth?tab=register"
-                                class="auth__link"
-                                >Регистрация</router-link
-                            >
-                        </div>
-                    </template> -->
                 </div>
             </div>
         </div>
     </nav>
+
+    <!-- Меню профиля вынесено на верхний уровень DOM -->
+    <div
+        v-if="isShowProfileMenu"
+        class="profile-menu-overlay"
+        ref="profileMenuRef"
+    >
+        <div class="user__content">
+            <span class="user-email">{{ user?.email }}</span>
+            <button @click="handleLogout" class="btn btn-logout">Выйти</button>
+        </div>
+    </div>
 </template>
 
 <style scoped>
+/* Ваши существующие стили остаются без изменений */
 img {
-    /* Фильтр для светлой темы - темные иконки */
     filter: invert(0);
     transition: filter var(--transition-duration) ease;
 }
 
-/* Темная тема - светлые иконки */
 [data-theme='dark'] img {
     filter: invert(1);
 }
@@ -211,12 +237,15 @@ img {
     backdrop-filter: blur(10px);
     padding: 15px 0px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 100;
 }
 
 .navbar__content {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
 }
 
 .brand-link {
@@ -233,6 +262,7 @@ img {
     display: flex;
     align-items: center;
     gap: 15px;
+    position: relative;
 }
 
 .header {
@@ -295,8 +325,8 @@ img {
 }
 
 .user-email {
-    color: #666;
-    font-size: 0.9rem;
+    color: var(--color-text-primary);
+    font-size: 16px;
 }
 
 .nav-link {
@@ -313,14 +343,63 @@ img {
 
 .user-img {
     width: 30px;
+    height: 30px;
+}
+
+.profile-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.profile-button:hover {
+    background-color: var(--color-hover);
 }
 
 .btn-logout {
-    color: red;
+    background-color: rgb(204, 28, 28);
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 5px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-logout:hover {
+    background-color: rgb(180, 20, 20);
+}
+
+/* Стили для вынесенного меню профиля */
+.profile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    pointer-events: none;
 }
 
 .user__content {
-    /* display: none; */
+    position: absolute;
+    background-color: var(--color-white);
+    padding: 20px;
+    right: 20px;
+    top: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    row-gap: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    pointer-events: auto;
+    min-width: 200px;
 }
 
 .auth__content {
@@ -338,10 +417,6 @@ img {
         gap: 15px;
     }
 
-    .user-email {
-        display: none;
-    }
-
     .header {
         flex-direction: column;
         align-items: flex-start;
@@ -350,6 +425,11 @@ img {
 
     .theme-toggle {
         align-self: flex-start;
+    }
+
+    .user__content {
+        right: 15px;
+        top: 70px;
     }
 }
 
@@ -381,6 +461,14 @@ img {
 
     .user-img {
         width: 25px;
+        height: 25px;
+    }
+
+    .user__content {
+        right: 10px;
+        top: 65px;
+        min-width: 180px;
+        padding: 15px;
     }
 }
 </style>

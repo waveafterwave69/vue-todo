@@ -197,15 +197,11 @@ const handleClickOutside = (event: MouseEvent) => {
                                 alt="Профиль"
                             />
                         </button>
-
-                        <!-- Выносим меню профиля на верхний уровень, вне navbar -->
                     </template>
                 </div>
             </div>
         </div>
     </nav>
-
-    <!-- Меню профиля вынесено на верхний уровень DOM -->
     <div
         v-if="isShowProfileMenu"
         class="profile-menu-overlay"
@@ -282,7 +278,7 @@ img {
 .header__time span {
     font-weight: 300;
     font-size: 20px;
-    color: var(--color-text-secondary);
+    color: var(--color-text-primary);
 }
 
 .theme-toggle {
@@ -290,7 +286,6 @@ img {
     align-items: center;
     gap: 8px;
     padding: 12px 16px;
-    background-color: var(--color-white);
     border: 1px solid var(--color-border);
     border-radius: 12px;
     color: var(--color-text-primary);

@@ -100,7 +100,7 @@ const handleDelete = (task: TableItem) => {
     top: 0;
     left: 0;
     opacity: 0.5;
-    z-index: 3;
+    z-index: 100;
     position: fixed;
     width: 100%;
     height: 110vh;
@@ -111,7 +111,7 @@ const handleDelete = (task: TableItem) => {
     background-color: var(--color-text-primary-modal);
     border: 1px solid var(--color-purple);
     position: fixed;
-    z-index: 5;
+    z-index: 100;
     width: 500px;
     height: 500px;
     top: 50%;
@@ -409,8 +409,8 @@ img {
     }
 
     .tags-wrapper {
-        max-width: 200px;
-        max-height: 60px;
+        max-width: 250px;
+        max-height: 100px;
     }
 }
 
@@ -456,8 +456,8 @@ img {
     }
 
     .tags-wrapper {
-        max-width: 150px;
-        max-height: 50px;
+        max-width: 250px;
+        max-height: 100px;
     }
 }
 </style>

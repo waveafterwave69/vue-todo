@@ -29,142 +29,162 @@ onMounted(() => {
     <nav class="navbar">
         <div class="container">
             <div class="navbar__content">
-                <div class="header__time">
+                <router-link v-if="user" to="/home" class="header__time">
                     {{ hoursAndMinutes }},
                     <span>{{ day }} {{ currentMonth }}</span>
-                </div>
+                </router-link>
+                <router-link v-else to="/" class="header__time">
+                    {{ hoursAndMinutes }},
+                    <span>{{ day }} {{ currentMonth }}</span>
+                </router-link>
 
                 <div class="nav-menu">
-                    <template v-if="user">
-                        <span class="user-email">{{ user.email }}</span>
-                        <!-- Кнопка переключения темы -->
-                        <button
-                            class="theme-toggle"
-                            @click="themeStore.toggleTheme()"
-                            :title="
+                    <!-- Кнопка переключения темы -->
+                    <button
+                        class="theme-toggle"
+                        @click="themeStore.toggleTheme()"
+                        :title="
+                            themeStore.theme === 'light'
+                                ? 'Переключить на темную тему'
+                                : 'Переключить на светлую тему'
+                        "
+                    >
+                        <svg
+                            v-if="themeStore.theme === 'light'"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            class="theme-toggle__icon"
+                        >
+                            <path
+                                d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                        <svg
+                            v-else
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            class="theme-toggle__icon"
+                        >
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="5"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+                            <line
+                                x1="12"
+                                y1="1"
+                                x2="12"
+                                y2="3"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+                            <line
+                                x1="12"
+                                y1="21"
+                                x2="12"
+                                y2="23"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+                            <line
+                                x1="4.22"
+                                y1="4.22"
+                                x2="5.64"
+                                y2="5.64"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+                            <line
+                                x1="18.36"
+                                y1="18.36"
+                                x2="19.78"
+                                y2="19.78"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+                            <line
+                                x1="1"
+                                y1="12"
+                                x2="3"
+                                y2="12"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+                            <line
+                                x1="21"
+                                y1="12"
+                                x2="23"
+                                y2="12"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+                            <line
+                                x1="4.22"
+                                y1="19.78"
+                                x2="5.64"
+                                y2="18.36"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+                            <line
+                                x1="18.36"
+                                y1="5.64"
+                                x2="19.78"
+                                y2="4.22"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+                        </svg>
+
+                        <span class="theme-toggle__text">
+                            {{
                                 themeStore.theme === 'light'
-                                    ? 'Переключить на темную тему'
-                                    : 'Переключить на светлую тему'
-                            "
-                        >
-                            <svg
-                                v-if="themeStore.theme === 'light'"
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                class="theme-toggle__icon"
-                            >
-                                <path
-                                    d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-                            </svg>
-                            <svg
-                                v-else
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                class="theme-toggle__icon"
-                            >
-                                <circle
-                                    cx="12"
-                                    cy="12"
-                                    r="5"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                />
-                                <line
-                                    x1="12"
-                                    y1="1"
-                                    x2="12"
-                                    y2="3"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                />
-                                <line
-                                    x1="12"
-                                    y1="21"
-                                    x2="12"
-                                    y2="23"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                />
-                                <line
-                                    x1="4.22"
-                                    y1="4.22"
-                                    x2="5.64"
-                                    y2="5.64"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                />
-                                <line
-                                    x1="18.36"
-                                    y1="18.36"
-                                    x2="19.78"
-                                    y2="19.78"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                />
-                                <line
-                                    x1="1"
-                                    y1="12"
-                                    x2="3"
-                                    y2="12"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                />
-                                <line
-                                    x1="21"
-                                    y1="12"
-                                    x2="23"
-                                    y2="12"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                />
-                                <line
-                                    x1="4.22"
-                                    y1="19.78"
-                                    x2="5.64"
-                                    y2="18.36"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                />
-                                <line
-                                    x1="18.36"
-                                    y1="5.64"
-                                    x2="19.78"
-                                    y2="4.22"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                />
-                            </svg>
-                            <span class="theme-toggle__text">
-                                {{
-                                    themeStore.theme === 'light'
-                                        ? 'Темная'
-                                        : 'Светлая'
-                                }}
-                            </span>
+                                    ? 'Темная'
+                                    : 'Светлая'
+                            }}
+                        </span>
+                    </button>
+                    <template v-if="user">
+                        <button>
+                            <img
+                                src="../assets/user.png"
+                                class="user-img"
+                                alt="Профиль"
+                            />
                         </button>
-                        <button @click="handleLogout" class="btn btn-logout">
-                            Выйти
-                        </button>
+
+                        <div class="user__content">
+                            <span class="user-email">{{ user.email }}</span>
+                            <button
+                                @click="handleLogout"
+                                class="btn btn-logout"
+                            >
+                                Выйти
+                            </button>
+                        </div>
                     </template>
-                    <template v-else>
-                        <router-link to="/auth?tab=login" class="nav-link"
-                            >Войти</router-link
-                        >
-                        <router-link
-                            to="/auth?tab=register"
-                            class="btn btn-primary"
-                            >Регистрация</router-link
-                        >
-                    </template>
+                    <!-- <template v-else>
+                        <div class="auth__content">
+                            <router-link to="/auth?tab=login" class="auth__link"
+                                >Войти</router-link
+                            >
+                            <router-link
+                                to="/auth?tab=register"
+                                class="auth__link"
+                                >Регистрация</router-link
+                            >
+                        </div>
+                    </template> -->
                 </div>
             </div>
         </div>
@@ -172,10 +192,25 @@ onMounted(() => {
 </template>
 
 <style scoped>
+img {
+    /* Фильтр для светлой темы - темные иконки */
+    filter: invert(0);
+    transition: filter var(--transition-duration) ease;
+}
+
+/* Темная тема - светлые иконки */
+[data-theme='dark'] img {
+    filter: invert(1);
+}
+
+[data-theme='dark'] .navbar {
+    box-shadow: 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
 .navbar {
     backdrop-filter: blur(10px);
     padding: 15px 0px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
 .navbar__content {
@@ -276,6 +311,27 @@ onMounted(() => {
     background: #f5f5f5;
 }
 
+.user-img {
+    width: 30px;
+}
+
+.btn-logout {
+    color: red;
+}
+
+.user__content {
+    /* display: none; */
+}
+
+.auth__content {
+    display: flex;
+    column-gap: 20px;
+}
+
+.auth__link {
+    color: var(--color-text-primary);
+}
+
 @media (max-width: 768px) {
     .nav-container {
         flex-direction: column;
@@ -298,12 +354,7 @@ onMounted(() => {
 }
 
 @media (max-width: 475px) {
-    .header__time {
-        font-size: 24px;
-    }
-
     .theme-toggle {
-        width: 100%;
         justify-content: center;
     }
 
@@ -316,16 +367,20 @@ onMounted(() => {
     }
 
     .header__time {
-        font-size: 28px;
+        font-size: 22px;
     }
 
     .header__time span {
-        font-size: 18px;
+        font-size: 16px;
     }
 
     .theme-toggle {
         padding: 10px 14px;
         font-size: 13px;
+    }
+
+    .user-img {
+        width: 25px;
     }
 }
 </style>

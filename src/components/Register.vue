@@ -47,9 +47,8 @@ const handleRegister = async (): Promise<void> => {
     <div class="auth-form">
         <h2>Регистрация</h2>
 
-        <form @submit.prevent="handleRegister">
+        <form @submit.prevent="handleRegister" class="form">
             <div class="form-group">
-                <label for="register-username">Имя пользователя:</label>
                 <input
                     type="text"
                     id="register-username"
@@ -60,7 +59,6 @@ const handleRegister = async (): Promise<void> => {
             </div>
 
             <div class="form-group">
-                <label for="register-email">Email:</label>
                 <input
                     type="email"
                     id="register-email"
@@ -71,14 +69,13 @@ const handleRegister = async (): Promise<void> => {
             </div>
 
             <div class="form-group">
-                <label for="register-password">Пароль:</label>
                 <input
                     type="password"
                     id="register-password"
                     v-model="registerForm.password"
                     required
                     minlength="6"
-                    placeholder="Минимум 6 символов"
+                    placeholder="Пароль(минимум 6 символов)"
                 />
             </div>
 
@@ -93,9 +90,12 @@ const handleRegister = async (): Promise<void> => {
 
         <p class="auth-switch">
             Уже есть аккаунт?
-            <a href="#" @click.prevent="$emit('switchTab', 'login')">
+            <router-link
+                to="/auth?tab=login"
+                @click.prevent="$emit('switchTab', 'login')"
+            >
                 Войдите
-            </a>
+            </router-link>
         </p>
     </div>
 </template>
@@ -106,10 +106,16 @@ const handleRegister = async (): Promise<void> => {
     margin: 0 auto;
 }
 
+.btn {
+    width: 100%;
+}
+
 .auth-form h2 {
     text-align: center;
     margin-bottom: 30px;
-    color: #333;
+    color: var(--color-text-primary);
+    font-size: 24px;
+    font-weight: 600;
 }
 
 .auth-switch {
@@ -118,7 +124,7 @@ const handleRegister = async (): Promise<void> => {
 }
 
 .auth-switch a {
-    color: #2196f3;
+    color: var(--color-purple);
     text-decoration: none;
 }
 
@@ -130,5 +136,64 @@ const handleRegister = async (): Promise<void> => {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none !important;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
+}
+
+.form-group input {
+    border: 1px solid var(--color-text-primary);
+    padding: 10px 20px;
+    border-radius: 15px;
+    font-size: 18px;
+    width: 100%;
+}
+
+.btn-primary {
+    background-color: var(--color-purple);
+    color: var(--color-white);
+    font-weight: 500;
+    padding: 15px;
+    border-radius: 15px;
+}
+
+.btn-primary:hover {
+    background-color: #5223df;
+}
+
+[data-theme='dark'] .btn-primary:hover {
+    background-color: #754eeb;
+}
+
+@media (max-width: 500px) {
+    .auth-form {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .auth-form h2 {
+        margin-bottom: 20px;
+        font-size: 22px;
+    }
+
+    .auth-switch {
+        margin-top: 10px;
+    }
+
+    .form {
+        row-gap: 10px;
+    }
+
+    .form-group input {
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+
+    .btn-primary {
+        padding: 12px;
+    }
 }
 </style>

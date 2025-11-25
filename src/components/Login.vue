@@ -1,48 +1,3 @@
-<template>
-    <div class="auth-form">
-        <h2>Вход в систему</h2>
-
-        <form @submit.prevent="handleLogin">
-            <div class="form-group">
-                <label for="login-email">Email:</label>
-                <input
-                    type="email"
-                    id="login-email"
-                    v-model="loginForm.email"
-                    required
-                    placeholder="your@email.com"
-                />
-            </div>
-
-            <div class="form-group">
-                <label for="login-password">Пароль:</label>
-                <input
-                    type="password"
-                    id="login-password"
-                    v-model="loginForm.password"
-                    required
-                    placeholder="Ваш пароль"
-                />
-            </div>
-
-            <button type="submit" class="btn btn-primary" :disabled="loading">
-                {{ loading ? 'Вход...' : 'Войти' }}
-            </button>
-        </form>
-
-        <div v-if="message" class="message" :class="messageType">
-            {{ message }}
-        </div>
-
-        <p class="auth-switch">
-            Нет аккаунта?
-            <a href="#" @click.prevent="$emit('switchTab', 'register')">
-                Зарегистрируйтесь
-            </a>
-        </p>
-    </div>
-</template>
-
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
@@ -76,7 +31,6 @@ const handleLogin = async (): Promise<void> => {
     const result = await authService.login(loginForm.email, loginForm.password)
 
     if (result.success) {
-        message.value = '✅ Вход успешен!'
         messageType.value = 'success'
 
         setTimeout(() => {
@@ -91,6 +45,52 @@ const handleLogin = async (): Promise<void> => {
 }
 </script>
 
+<template>
+    <div class="auth-form">
+        <h2>Вход</h2>
+
+        <div v-if="message" class="message" :class="messageType">
+            {{ message }}
+        </div>
+
+        <form @submit.prevent="handleLogin" class="form">
+            <div class="form-group">
+                <input
+                    type="email"
+                    id="login-email"
+                    v-model="loginForm.email"
+                    required
+                    placeholder="your@email.com"
+                />
+            </div>
+
+            <div class="form-group">
+                <input
+                    type="password"
+                    id="login-password"
+                    v-model="loginForm.password"
+                    required
+                    placeholder="Ваш пароль"
+                />
+            </div>
+
+            <button type="submit" class="btn btn-primary" :disabled="loading">
+                {{ loading ? 'Вход...' : 'Войти' }}
+            </button>
+        </form>
+
+        <p class="auth-switch">
+            Нет аккаунта?
+            <router-link
+                to="/auth?tab=register"
+                @click.prevent="$emit('switchTab', 'register')"
+            >
+                Зарегистрируйтесь
+            </router-link>
+        </p>
+    </div>
+</template>
+
 <style scoped>
 .auth-form {
     max-width: 400px;
@@ -100,7 +100,14 @@ const handleLogin = async (): Promise<void> => {
 .auth-form h2 {
     text-align: center;
     margin-bottom: 30px;
-    color: #333;
+    color: var(--color-text-primary);
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.message {
+    text-align: center;
+    margin-bottom: 15px;
 }
 
 .auth-switch {
@@ -109,7 +116,7 @@ const handleLogin = async (): Promise<void> => {
 }
 
 .auth-switch a {
-    color: #2196f3;
+    color: var(--color-purple);
     text-decoration: none;
 }
 
@@ -121,5 +128,63 @@ const handleLogin = async (): Promise<void> => {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none !important;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
+}
+
+.form-group input {
+    border: 1px solid var(--color-text-primary);
+    padding: 10px 20px;
+    border-radius: 15px;
+    font-size: 18px;
+    width: 100%;
+}
+
+.btn-primary {
+    background-color: var(--color-purple);
+    color: var(--color-white);
+    padding: 15px;
+    border-radius: 15px;
+}
+
+.btn-primary:hover {
+    background-color: #5223df;
+}
+
+[data-theme='dark'] .btn-primary:hover {
+    background-color: #754eeb;
+}
+
+@media (max-width: 500px) {
+    .auth-form {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .auth-form h2 {
+        margin-bottom: 20px;
+        font-size: 22px;
+    }
+
+    .auth-switch {
+        margin-top: 10px;
+    }
+
+    .form {
+        row-gap: 10px;
+    }
+
+    .form-group input {
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+
+    .btn-primary {
+        padding: 12px;
+    }
 }
 </style>

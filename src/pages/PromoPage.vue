@@ -30,7 +30,7 @@ import { RouterLink } from 'vue-router'
 
 <style scoped>
 .promo__content {
-    margin-top: 80px;
+    margin-top: 50px;
     display: flex;
     align-items: center;
     column-gap: 100px;

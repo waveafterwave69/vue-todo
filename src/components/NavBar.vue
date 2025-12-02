@@ -12,11 +12,6 @@ const isShowProfileMenu = ref<boolean>(false)
 const profileMenuRef = ref<HTMLElement | null>(null)
 const profileButtonRef = ref<HTMLElement | null>(null)
 
-const handleLogout = async (): Promise<void> => {
-    await authService.logout()
-    router.push('/')
-}
-
 const { currentMonth, day, hoursAndMinutes } = useDate()
 const themeStore = useThemeStore()
 
@@ -53,6 +48,12 @@ const handleClickOutside = (event: MouseEvent) => {
     ) {
         closeProfileMenu()
     }
+}
+
+const handleLogout = async (): Promise<void> => {
+    closeProfileMenu()
+    await authService.logout()
+    router.push('/')
 }
 </script>
 
@@ -215,7 +216,6 @@ const handleClickOutside = (event: MouseEvent) => {
 </template>
 
 <style scoped>
-/* Ваши существующие стили остаются без изменений */
 img {
     filter: invert(0);
     transition: filter var(--transition-duration) ease;

@@ -46,6 +46,9 @@ const handleRegister = async (): Promise<void> => {
 <template>
     <div class="auth-form">
         <h2>Регистрация</h2>
+        <div v-if="message" class="message" :class="messageType">
+            {{ message }}
+        </div>
 
         <form @submit.prevent="handleRegister" class="form">
             <div class="form-group">
@@ -84,10 +87,6 @@ const handleRegister = async (): Promise<void> => {
             </button>
         </form>
 
-        <div v-if="message" class="message" :class="messageType">
-            {{ message }}
-        </div>
-
         <p class="auth-switch">
             Уже есть аккаунт?
             <router-link
@@ -116,6 +115,11 @@ const handleRegister = async (): Promise<void> => {
     color: var(--color-text-primary);
     font-size: 24px;
     font-weight: 600;
+}
+
+.message {
+    text-align: center;
+    margin-bottom: 15px;
 }
 
 .auth-switch {

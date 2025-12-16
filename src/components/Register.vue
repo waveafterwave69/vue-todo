@@ -67,7 +67,7 @@ const handleRegister = async (): Promise<void> => {
                     id="register-email"
                     v-model="registerForm.email"
                     required
-                    placeholder="your@email.com"
+                    placeholder="Ваша почта"
                 />
             </div>
 

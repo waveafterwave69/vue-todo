@@ -60,7 +60,7 @@ const handleLogin = async (): Promise<void> => {
                     id="login-email"
                     v-model="loginForm.email"
                     required
-                    placeholder="your@email.com"
+                    placeholder="Ваша почта"
                 />
             </div>
 

@@ -2,6 +2,8 @@
 import { useItemsStore } from '@/store/items'
 import { useTaskStore } from '@/store/task'
 import { TableItem } from '@/types'
+import { ref } from 'vue'
+import { useClickOutside } from 'wave-hooks'
 
 const taskStore = useTaskStore()
 const itemsStore = useItemsStore()
@@ -10,16 +12,19 @@ const handleDelete = (task: TableItem) => {
     taskStore.closeModal()
     itemsStore.deleteItem(task.id)
 }
+
+const modalRef = ref<HTMLElement | null>()
+
+useClickOutside(modalRef, taskStore.closeModal)
 </script>
 
 <template>
+    <div v-if="taskStore.showModal" class="back"></div>
     <div
-        v-if="taskStore.showModal"
-        class="back"
-        @click="taskStore.closeModal"
-    ></div>
-
-    <div class="modal" v-if="taskStore.showModal && taskStore.task">
+        class="modal"
+        ref="modalRef"
+        v-if="taskStore.showModal && taskStore.task"
+    >
         <div class="modal__content">
             <div class="top">
                 <button class="close" @click="taskStore.closeModal">
